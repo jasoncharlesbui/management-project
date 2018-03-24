@@ -1,100 +1,22 @@
 import React from "react";
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+
+import api from '../../api'
+import { fromProducts } from '../../actions'
+import * as fromReducers from '../../reducers'
+
 import "./Products.css";
 import {
-    Toolbar,
-    Typography,
-    Grid,
-    InputAdornment,
     IconButton,
     TextField,
     Drawer,
-    GridList,
-    GridListTile,
-    withStyles,
-    colors
+    withStyles
 } from "material-ui";
 import {
-    ArrowDropUp,
-    ArrowDropDown,
-    Clear,
-    Search,
     KeyboardArrowDown,
-    KeyboardArrowUp
 } from "material-ui-icons";
 import Subheader from "material-ui/List/ListSubheader";
-
-const listProducts = [
-    {
-        id: 1,
-        img: "https://material-ui-next.com/static/images/grid-list/mushroom.jpg",
-        title: "Image",
-        author: "author",
-        price: "600.000"
-    },
-    {
-        id: 2,
-        img: "https://material-ui-next.com/static/images/grid-list/mushroom.jpg",
-        title: "Image",
-        author: "author",
-        price: "600.000"
-    },
-    {
-        id: 3,
-        img: "https://material-ui-next.com/static/images/grid-list/plant.jpg",
-        title: "Image",
-        author: "author",
-        price: "600.000"
-    },
-    {
-        id: 4,
-        img: "https://material-ui-next.com/static/images/grid-list/plant.jpg",
-        title: "Image",
-        author: "author",
-        price: "600.000"
-    },
-    {
-        id: 5,
-        img: "https://material-ui-next.com/static/images/grid-list/plant.jpg",
-        title: "Image",
-        author: "author",
-        price: "600.000"
-    },
-    {
-        id: 6,
-        img: "https://material-ui-next.com/static/images/grid-list/mushroom.jpg",
-        title: "Image",
-        author: "author",
-        price: "600.000"
-    },
-    {
-        id: 7,
-        img: "https://material-ui-next.com/static/images/grid-list/mushroom.jpg",
-        title: "Image",
-        author: "author",
-        price: "600.000"
-    },
-    {
-        id: 8,
-        img: "https://material-ui-next.com/static/images/grid-list/plant.jpg",
-        title: "Image",
-        author: "author",
-        price: "600.000"
-    },
-    {
-        id: 9,
-        img: "https://material-ui-next.com/static/images/grid-list/plant.jpg",
-        title: "Image",
-        author: "author",
-        price: "600.000"
-    },
-    {
-        id: 10,
-        img: "https://material-ui-next.com/static/images/grid-list/plant.jpg",
-        title: "Image",
-        author: "author",
-        price: "600.000"
-    }
-];
 
 const styles = {
     root: {
@@ -121,6 +43,20 @@ const styles = {
     },
 };
 
+
+const Product = ({ product }) => {
+    return (
+        <div className="product-item">
+            <img src="https://static.pexels.com/photos/46239/salmon-dish-food-meal-46239.jpeg" alt="Forest" />
+            <div className="container">
+                <span className="product-price">{product.price}</span><br />
+                <span className="product-name">{product.title}</span>
+            </div>
+        </div>
+    )
+}
+
+
 class Products extends React.Component {
 
     constructor(props) {
@@ -133,6 +69,11 @@ class Products extends React.Component {
 
     componentDidMount() {
         this.props.onRef(this)
+
+        const { store } = this.context;
+        api.getProducts(products => {
+            store.dispatch(fromProducts.acGetProducts(products));
+        })
     }
     componentWillUnmount() {
         this.props.onRef(undefined)
@@ -145,7 +86,7 @@ class Products extends React.Component {
     };
 
     render() {
-        const { classes } = this.props;
+        const { products, classes } = this.props;
         const { listBills, value } = this.state;
         return (
             <Drawer
@@ -166,31 +107,26 @@ class Products extends React.Component {
                 </div>
 
                 <div className="products-content">
-                    <div className="product-item">
-                        <img src="https://static.pexels.com/photos/46239/salmon-dish-food-meal-46239.jpeg" alt="Forest" />
-                        <div className="container">
-                            <span className="product-price">1.800.800</span><br />
-                            <span className="product-name">Thịt heo lái A</span>
-                        </div>
-                    </div>
-                    <div className="product-item">
-                        <img src="https://i.ytimg.com/vi/mEBFswpYms4/maxresdefault.jpg" alt="Forest" />
-                        <div className="container">
-                            <span className="product-price">1.800.800</span><br />
-                            <span className="product-name">Thịt heo lái A</span>
-                        </div>
-                    </div>
-                    <div className="product-item">
-                        <img src="https://static.pexels.com/photos/70497/pexels-photo-70497.jpeg" alt="Forest" />
-                        <div className="container">
-                            <span className="product-price">1.800.800</span><br />
-                            <span className="product-name">Thịt heo lái A</span>
-                        </div>
-                    </div>
+                    {products.map(item =>
+                        <Product
+                            key={item.id}
+                            product={item}
+                        />
+                    )}
                 </div>
             </Drawer>
         );
     }
 }
 
-export default withStyles(styles)(Products);
+const mapStateToProps = state => {
+    return {
+        products: fromReducers.fromProducts.getVisibleProducts(state.products)
+    }
+}
+
+Products.contextTypes = {
+    store: PropTypes.object
+}
+
+export default withStyles(styles)(connect(mapStateToProps)(Products));

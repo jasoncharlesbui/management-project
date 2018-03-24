@@ -19,8 +19,8 @@
 .item {
     border-bottom: 1px solid #ebebeb;
     padding-bottom: 5px;
-    font-size: 12px;
-    height: 50px;
+    font-size: 14px;
+    height: 60px;
 }
 
 .item:nth-child(odd) {
@@ -61,7 +61,7 @@
 }
 
 .item .cell-name h4 {
-    font-size: 13px;
+    font-size: 15px;
     padding-bottom: 2px;
     margin: 0;
     color: #111111;
@@ -127,14 +127,14 @@
     border-style: solid;
     border-bottom-color: #e1e1e1;
     background-color: transparent;
-    font-size: 14px;
+    font-size: 15px;
     text-align: right;
     cursor: pointer;
 }
 
 .item .cell-change-price .item .cell-quantity .item .cell-price {
     text-align: right;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .item .cell-price {

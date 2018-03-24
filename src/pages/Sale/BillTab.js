@@ -20,7 +20,7 @@ const tempData = [
         "price": 40000000,
         "image": "http://via.placeholder.com/150x150",
         "sumup": {
-            "quantiy": 1,
+            "quantity": 1,
             "customPrice": 0,
             "total": 0
         }
@@ -33,7 +33,7 @@ const tempData = [
         "price": 40000000,
         "image": "http://via.placeholder.com/150x150",
         "sumup": {
-            "quantiy": 1,
+            "quantity": 1,
             "customPrice": 0,
             "total": 0
         }
@@ -45,10 +45,22 @@ class BillItem extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            data: this.props.item,
             currentPrice: this.props.item.price,
             quantity: this.props.item.sumup.quantity,
-            total: this.props.item.sumup.total * this.props.item.price
+            total: this.props.item.sumup.quantity * this.props.item.price
         }
+    }
+
+    componentDidMount = () => {
+
+    }
+
+    handlePlusButton = () => {
+        this.setState((prevState) => {
+            return { quantity: prevState.quantity + 1 };
+        })
+        console.log(this.state.quantity);
     }
 
     render() {
@@ -57,7 +69,7 @@ class BillItem extends React.Component {
         return (
             <div className="item">
                 <div className="cell-order">{idex + 1}</div>
-                <div className="cell-action"><Clear style={{ width: 14, height: 14 }} /></div>
+                <div className="cell-action"><Clear style={{ width: 16, height: 16 }} /></div>
 
                 <div className="row-product">
 
@@ -67,10 +79,14 @@ class BillItem extends React.Component {
                     </div>
 
                     <div className="cell-quantity">
-                        <button className="plus-btn" type="button" name="button">
+                        <button className="plus-btn" type="button" name="button"
+                            onClick={() => {
+                                this.handlePlusButton();
+                            }}
+                        >
                             <Add style={{ width: 14, height: 14 }} />
                         </button>
-                        <input type="text" name="name" value={quantity} />
+                        <input type="text" name="name" value={`${quantity}`} />
                         <button className="minus-btn" type="button" name="button">
                             <Remove style={{ width: 14, height: 14 }} />
                         </button>

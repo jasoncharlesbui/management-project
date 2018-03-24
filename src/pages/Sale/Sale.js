@@ -208,7 +208,7 @@ class RightPager extends React.Component {
     }
 }
 
-class Home extends React.Component {
+class Sale extends React.Component {
 
     constructor(props) {
         super(props);
@@ -227,4 +227,4 @@ class Home extends React.Component {
     }
 }
 
-export default withStyles(styles)(Home);
+export default withStyles(styles)(Sale);

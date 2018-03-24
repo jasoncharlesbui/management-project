@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese');
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+body {
+    padding: 0;
+    margin: auto;
+}
+
+.root {
+    width: 100vw;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+.header-bar {
+    height: 5vh;
+    background-color: #2196f3;
+    box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12);
+    display: flex;
+    align-items: center;
+}
+
+.app-title {
+    padding-left: 30px;
+    padding-right: 30px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    font-weight: bold;
+    font-size: 25px;
+}
+
+.content {
+    height: 100%;
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+#managing-menu {
+    z-index: 9999;
+    position: absolute;
+    background-color: #FFFFFF;
+    color: black;
+    border: 1px solid black;
+}
