@@ -14,17 +14,6 @@ import "./App.css";
 import "./pages/Managing/Managing.css";
 
 class App extends Component {
-
-	// componentDidMount() {
-	// 	const { store } = this.context;
-
-	// 	api.getProducts(products => {
-	// 		store.dispatch(fromProducts.acGetProducts(products));
-	// 	})
-
-	// 	console.log(this.props.testProduct);
-	// }
-
 	render() {
 		return (
 			<BrowserRouter>

@@ -2,7 +2,9 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import api from '../../api'
+import * as api from '../../api'
+// import * as apii from '../../api'
+import { apiFetchOptions } from '../../api/options'
 import { fromProducts } from '../../actions'
 import * as fromReducers from '../../reducers'
 
@@ -74,6 +76,11 @@ class Products extends React.Component {
         api.getProducts(products => {
             store.dispatch(fromProducts.acGetProducts(products));
         })
+
+        api.fromOption.apiFetchOptions()
+            .then((result) => {
+                console.log(result);
+            });
     }
     componentWillUnmount() {
         this.props.onRef(undefined)
