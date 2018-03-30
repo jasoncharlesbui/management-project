@@ -5,7 +5,10 @@ import { connect } from 'react-redux';
 import * as api from '../../api'
 // import * as apii from '../../api'
 import { apiFetchOptions } from '../../api/options'
-import { fromProducts } from '../../actions'
+import {
+    fromProducts,
+    fromCart
+} from '../../actions'
 import * as fromReducers from '../../reducers'
 
 import "./Products.css";
@@ -46,15 +49,17 @@ const styles = {
 };
 
 
-const Product = ({ product }) => {
+const Product = ({ product, onActionAddtoCartCliked }) => {
     return (
-        <div className="product-item">
+        <div
+            className="product-item"
+            onClick={onActionAddtoCartCliked}>
             <img src="https://static.pexels.com/photos/46239/salmon-dish-food-meal-46239.jpeg" alt="Forest" />
             <div className="container">
                 <span className="product-price">{product.price}</span><br />
                 <span className="product-name">{product.title}</span>
             </div>
-        </div>
+        </div >
     )
 }
 
@@ -64,7 +69,6 @@ class Products extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 0,
             open: true
         };
     }
@@ -94,7 +98,7 @@ class Products extends React.Component {
 
     render() {
         const { products, classes } = this.props;
-        const { listBills, value } = this.state;
+        const { listBills } = this.state;
         return (
             <Drawer
                 variant="persistent"
@@ -118,6 +122,7 @@ class Products extends React.Component {
                         <Product
                             key={item.id}
                             product={item}
+                            onActionAddtoCartCliked={() => this.props.onActionAddtoCart(item.id)}
                         />
                     )}
                 </div>
@@ -132,8 +137,12 @@ const mapStateToProps = state => {
     }
 }
 
+const mapActionsToProps = {
+    onActionAddtoCart: fromCart.acAddToCart
+}
+
 Products.contextTypes = {
     store: PropTypes.object
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(Products));
+export default withStyles(styles)(connect(mapStateToProps, mapActionsToProps)(Products));

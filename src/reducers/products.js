@@ -41,5 +41,3 @@ export const getProduct = (state, id) => {
 export const getVisibleProducts = (state) => {
     return state.visibleIds.map(id => getProduct(state, id));
 }
-
-// export const get
