@@ -43,3 +43,9 @@ const cart = (state = initialState, action) => {
 }
 
 export default cart;
+
+
+// selectors
+export const getAddedIds = state => state.addedIds;
+export const getQuantity = (state, productId) =>
+    state.quantityByIds[productId] || 0;

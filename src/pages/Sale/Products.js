@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import * as api from '../../api'
-// import * as apii from '../../api'
-import { apiFetchOptions } from '../../api/options'
 import {
     fromProducts,
     fromCart

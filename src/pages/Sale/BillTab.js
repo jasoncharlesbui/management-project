@@ -1,6 +1,10 @@
 import React from "react";
 import "./BillTab.css";
 import PropTypes from "prop-types";
+import { connect } from 'react-redux';
+
+import * as fromReducers from '../../reducers'
+
 import {
     withStyles,
     colors
@@ -41,64 +45,39 @@ const tempData = [
 
 ];
 
-class BillItem extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: this.props.item,
-            currentPrice: this.props.item.price,
-            quantity: this.props.item.sumup.quantity,
-            total: this.props.item.sumup.quantity * this.props.item.price
-        }
-    }
+const BillItem = ({ product, onActionChangeQuantityClicked }) => {
+    return (
+        <div className="item">
+            <div className="cell-order">{1}</div>
+            <div className="cell-action"><Clear style={{ width: 16, height: 16 }} /></div>
 
-    componentDidMount = () => {
+            <div className="row-product">
 
-    }
-
-    handlePlusButton = () => {
-        this.setState((prevState) => {
-            return { quantity: prevState.quantity + 1 };
-        })
-        console.log(this.state.quantity);
-    }
-
-    render() {
-        const { idex, item } = this.props;
-        const { currentPrice, quantity, total } = this.state;
-        return (
-            <div className="item">
-                <div className="cell-order">{idex + 1}</div>
-                <div className="cell-action"><Clear style={{ width: 16, height: 16 }} /></div>
-
-                <div className="row-product">
-
-                    <div className="cell-name">
-                        <h4>{item.name}</h4>
-                        <div className="cell-code" title={item.code}>{item.code}</div>
-                    </div>
-
-                    <div className="cell-quantity">
-                        <button className="plus-btn" type="button" name="button"
-                            onClick={() => {
-                                this.handlePlusButton();
-                            }}
-                        >
-                            <Add style={{ width: 14, height: 14 }} />
-                        </button>
-                        <input type="text" name="name" value={`${quantity}`} />
-                        <button className="minus-btn" type="button" name="button">
-                            <Remove style={{ width: 14, height: 14 }} />
-                        </button>
-                    </div>
-                    <div className="cell-change-price">
-                        <button>{currentPrice}</button>
-                    </div>
-                    <div className="cell-price">{total}</div>
+                <div className="cell-name">
+                    <h4>{product.title}</h4>
+                    <div className="cell-code" title={product.code}>{product.code}</div>
                 </div>
+
+                <div className="cell-quantity">
+                    <button className="plus-btn" type="button" name="button"
+                        onClick={() => {
+                            this.handlePlusButton();
+                        }}
+                    >
+                        <Add style={{ width: 14, height: 14 }} />
+                    </button>
+                    <input type="text" name="name" value={`${product.quantity}`} />
+                    <button className="minus-btn" type="button" name="button">
+                        <Remove style={{ width: 14, height: 14 }} />
+                    </button>
+                </div>
+                <div className="cell-change-price">
+                    <button>{product.price}</button>
+                </div>
+                <div className="cell-price">{product.price * product.quantity}</div>
             </div>
-        )
-    }
+        </div>
+    )
 }
 
 
@@ -109,11 +88,16 @@ class BillTab extends React.Component {
     }
 
     render() {
+        const { products } = this.props;
         return (
             <div className="shopping-cart">
-                {tempData.map((item, idex) => {
+                {products.map((product) => {
                     return (
-                        <BillItem idex={idex} key={idex} item={item} />
+                        <BillItem
+                            key={product.id}
+                            product={product}
+                            onActionChangeQuantityClicked={this.props.onActionChangeQuantity}
+                        />
                     )
                 })}
             </div>
@@ -121,4 +105,14 @@ class BillTab extends React.Component {
     }
 }
 
-export default BillTab;
+const mapStateToProps = state => {
+    return {
+        products: fromReducers.getCartProducts(state)
+    }
+}
+
+const mapActionToProps = {
+    onActionChangeQuantity: "cool"
+}
+
+export default connect(mapStateToProps, mapActionToProps)(BillTab);

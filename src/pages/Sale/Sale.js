@@ -7,8 +7,7 @@ import {
     InputAdornment,
     IconButton,
     Tabs, Tab,
-    withStyles,
-    colors
+    withStyles
 } from "material-ui";
 import {
     Search, KeyboardArrowUp
