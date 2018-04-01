@@ -1,4 +1,4 @@
-import { actionTypes } from '../reducers/cart'
+import { actionTypes } from '../constants/ActionTypes'
 
 // actions
 const acAddToCartUnsafe = (productId) => ({

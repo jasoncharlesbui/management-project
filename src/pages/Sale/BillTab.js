@@ -45,10 +45,10 @@ const tempData = [
 
 ];
 
-const BillItem = ({ product, onActionChangeQuantityClicked }) => {
+const BillItem = ({ product, index, onActionChangeQuantityClicked }) => {
     return (
         <div className="item">
-            <div className="cell-order">{1}</div>
+            <div className="cell-order">{index + 1}</div>
             <div className="cell-action"><Clear style={{ width: 16, height: 16 }} /></div>
 
             <div className="row-product">
@@ -74,7 +74,7 @@ const BillItem = ({ product, onActionChangeQuantityClicked }) => {
                 <div className="cell-change-price">
                     <button>{product.price}</button>
                 </div>
-                <div className="cell-price">{product.price * product.quantity}</div>
+                <div className="cell-price">{(product.price * product.quantity).toFixed(2)}</div>
             </div>
         </div>
     )
@@ -91,9 +91,10 @@ class BillTab extends React.Component {
         const { products } = this.props;
         return (
             <div className="shopping-cart">
-                {products.map((product) => {
+                {products.map((product, index) => {
                     return (
                         <BillItem
+                            index={index}
                             key={product.id}
                             product={product}
                             onActionChangeQuantityClicked={this.props.onActionChangeQuantity}

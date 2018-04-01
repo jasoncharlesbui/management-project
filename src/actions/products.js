@@ -1,6 +1,6 @@
-import { actionTypes } from '../reducers'
+import { actionTypes } from '../constants/ActionTypes'
 
 export const acGetProducts = (products) => ({
-    type: actionTypes.RECEIVED_PRODUCTS,
+    type: actionTypes.RECEIVE_PRODUCTS,
     products
 })

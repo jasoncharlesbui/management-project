@@ -4,7 +4,7 @@ import { getAuthorizationHeader } from '../utils'
 import defaultConfig from './apiConfig'
 
 const endPoint = [
-    "options.json",
+    "options.json?paging=false",
     "fields=id,name"
 ].join("&");
 
