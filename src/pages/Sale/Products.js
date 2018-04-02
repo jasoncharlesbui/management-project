@@ -55,7 +55,7 @@ const Product = ({ product, onActionAddtoCartCliked }) => {
             <img src="https://static.pexels.com/photos/46239/salmon-dish-food-meal-46239.jpeg" alt="Forest" />
             <div className="container">
                 <span className="product-price">{product.price}</span><br />
-                <span className="product-name">{product.title}</span>
+                <span className="product-name">{product.name}</span>
             </div>
         </div >
     )
@@ -75,13 +75,14 @@ class Products extends React.Component {
         this.props.onRef(this)
 
         const { store } = this.context;
-        api.getProducts(products => {
-            store.dispatch(fromProducts.acGetProducts(products));
-        })
+        // api.getProducts(products => {
+        //     store.dispatch(fromProducts.acGetProducts(products));
+        // })
 
         api.fromOption.apiFetchOptions()
             .then((result) => {
-                console.log(result);
+                // console.log(result);
+                store.dispatch(fromProducts.acGetProducts(result));
             });
     }
     componentWillUnmount() {

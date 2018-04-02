@@ -14,37 +14,6 @@ import {
     Clear,
 } from "material-ui-icons";
 
-const tempData = [
-    {
-        "code": "MBP",
-        "name": "MacBook Pro 15-inch with Touch Bar 2017",
-        "id": "M3nqwbHRLq7",
-        "translations": [],
-        "stock": 10,
-        "price": 40000000,
-        "image": "http://via.placeholder.com/150x150",
-        "sumup": {
-            "quantity": 1,
-            "customPrice": 0,
-            "total": 0
-        }
-    }, {
-        "code": "MBP",
-        "name": "MacBook Pro 15-inch with Touch Bar 2017",
-        "id": "M3nqwbHRLq7",
-        "translations": [],
-        "stock": 10,
-        "price": 40000000,
-        "image": "http://via.placeholder.com/150x150",
-        "sumup": {
-            "quantity": 1,
-            "customPrice": 0,
-            "total": 0
-        }
-    }
-
-];
-
 const BillItem = ({ product, index, onActionChangeQuantityClicked }) => {
     return (
         <div className="item">
@@ -54,7 +23,7 @@ const BillItem = ({ product, index, onActionChangeQuantityClicked }) => {
             <div className="row-product">
 
                 <div className="cell-name">
-                    <h4>{product.title}</h4>
+                    <h4>{product.name}</h4>
                     <div className="cell-code" title={product.code}>{product.code}</div>
                 </div>
 
