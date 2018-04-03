@@ -33,6 +33,11 @@
 
 .item .cell-action {
     width: 35px;
+    cursor: pointer;
+}
+
+.item .cell-action:hover {
+    color: #E53935;
 }
 
 .item .cell-action .btn-icon {

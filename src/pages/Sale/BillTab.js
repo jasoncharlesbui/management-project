@@ -3,6 +3,10 @@ import "./BillTab.css";
 import PropTypes from "prop-types";
 import { connect } from 'react-redux';
 
+import {
+    fromProducts,
+    fromCart
+} from '../../actions'
 import * as fromReducers from '../../reducers'
 
 import {
@@ -29,21 +33,20 @@ const BillItem = ({ product, index, onActionChangeQuantityClicked }) => {
 
                 <div className="cell-quantity">
                     <button className="plus-btn" type="button" name="button"
-                        onClick={() => {
-                            this.handlePlusButton();
-                        }}
-                    >
+                        onClick={() => onActionChangeQuantityClicked(product.id, product.quantity + 1)}>
                         <Add style={{ width: 14, height: 14 }} />
                     </button>
-                    <input type="text" name="name" value={`${product.quantity}`} />
-                    <button className="minus-btn" type="button" name="button">
+                    <input type="text" name="name" value={`${product.quantity}`}
+                        onChange={() => null} />
+                    <button className="minus-btn" type="button" name="button"
+                        onClick={() => onActionChangeQuantityClicked(product.id, product.quantity - 1)}>
                         <Remove style={{ width: 14, height: 14 }} />
                     </button>
                 </div>
                 <div className="cell-change-price">
-                    <button>{product.price}</button>
+                    <button>{Number(product.price).toLocaleString()}</button>
                 </div>
-                <div className="cell-price">{(product.price * product.quantity).toFixed(2)}</div>
+                <div className="cell-price">{(product.price * product.quantity).toLocaleString()}</div>
             </div>
         </div>
     )
@@ -82,7 +85,7 @@ const mapStateToProps = state => {
 }
 
 const mapActionToProps = {
-    onActionChangeQuantity: "cool"
+    onActionChangeQuantity: fromCart.acChangeQuantity
 }
 
 export default connect(mapStateToProps, mapActionToProps)(BillTab);

@@ -17,6 +17,7 @@ const transfrom = data => {
             const o = {
                 id: d.id,
                 name: d.name,
+                code: d.code,
                 translations: 'not-yet',
                 price: d.attributeValues.find(x => x.attribute.id == metaData.PRODUCT_PRICE).value,
                 inventory: d.attributeValues.find(x => x.attribute.id == metaData.PRODUCT_INVENTORY).value,

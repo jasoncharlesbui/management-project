@@ -52,9 +52,9 @@ const Product = ({ product, onActionAddtoCartCliked }) => {
         <div
             className="product-item"
             onClick={onActionAddtoCartCliked}>
-            <img src="https://static.pexels.com/photos/46239/salmon-dish-food-meal-46239.jpeg" alt="Forest" />
+            <img src={product.image_url} alt={product.name} />
             <div className="container">
-                <span className="product-price">{product.price}</span><br />
+                <span className="product-price">{Number(product.price).toLocaleString()}</span><br />
                 <span className="product-name">{product.name}</span>
             </div>
         </div >
