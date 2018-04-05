@@ -9,7 +9,8 @@ import configureStore from './configureStore'
 
 ReactDOM.render(
     <Provider
-        store={configureStore()}>
+    // store={configureStore()}
+    >
         <App />
     </Provider>,
     document.getElementById('root'));
