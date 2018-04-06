@@ -13,7 +13,7 @@ const products = (state, action) => {
     }
 }
 
-const byIds = (state = {}, action, demoConflict) => {
+const byIds = (state = {}, action, demoConflict_3) => {
     switch (action.type) {
         case actionTypes.RECEIVE_PRODUCTS:
             return {
