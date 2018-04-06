@@ -1,6 +1,18 @@
 export const metaData = {
-    PRODUCT: 'LIc6avjZYTm',
-    PRODUCT_PRICE: 'gAVTYhhXJcM',
-    PRODUCT_INVENTORY: 'Pytqm59iTMC',
-    PRODUCT_IMAGE_URL: 'kTEz8fUzxjn',
-}
+    PRODUCT: {
+        type: "optionSet",
+        id: "LIc6avjZYTm"
+    },
+    PRODUCT_PRICE: {
+        type: "option",
+        id: "gAVTYhhXJcM"
+    },
+    PRODUCT_INVENTORY: {
+        type: "option",
+        id: "Pytqm59iTMC"
+    },
+    PRODUCT_IMAGE: {
+        type: "option",
+        id: "kTEz8fUzxjn"
+    }
+};

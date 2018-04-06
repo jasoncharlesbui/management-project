@@ -3,6 +3,8 @@ const getAuthorizationHeader = (username, password) => {
     return `Basic ${encoded}`;
 };
 
+
+
 module.exports = {
     getAuthorizationHeader
 }
