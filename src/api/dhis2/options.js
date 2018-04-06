@@ -1,9 +1,9 @@
 import fetch from 'node-fetch'
-import { getAuthorizationHeader } from '../utils'
+import { getAuthorizationHeader } from './utils.js'
 
-import { metaData } from './metaData'
+import { metaData } from './metadata'
 
-import defaultConfig from './apiConfig'
+import defaultConfig from './config'
 
 const endPoint = [
     `optionSets/${metaData.PRODUCT}.json?paging=false`,

@@ -1,7 +1,7 @@
 /**
  * Mocking client-server processing
  */
-import config from './apiConfig'
+import config from './config'
 
 import _products from './products.json'
 import * as fromOption from './options'

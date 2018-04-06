@@ -91,4 +91,5 @@
 .product-image {
     height: auto;
     width: 100%;
+    cursor: pointer;
 }

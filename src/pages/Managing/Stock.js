@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Paper from "material-ui/Paper";
 import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
 import ProductIcon from "material-ui-icons/ShoppingBasket";
+import AddIcon from 'material-ui-icons/Add';
+import Button from 'material-ui/Button';
+
 
 import ProductDetail from "./ProductDetail.js";
 import "./Stock.css";
@@ -10,13 +13,15 @@ class Stock extends Component {
     constructor() {
         super();
         this.state = {
-            showProductDetail: false
+            showProductDetail: false,
+            productDetailMode: "add"
         };
     }
 
-    handleShowProductDetail = () => {
+    handleShowProductDetail = (mode) => () => {
         this.setState({
-            showProductDetail: true
+            showProductDetail: true,
+            productDetailMode: mode
         })
     }
 
@@ -30,7 +35,7 @@ class Stock extends Component {
     render() {
         return (
             <div className="stock-page-container">
-                <ProductDetail showed={this.state.showProductDetail} handleHideProductDetail={this.handleHideProductDetail} />
+                <ProductDetail showed={this.state.showProductDetail} mode={this.state.productDetailMode} handleHideProductDetail={this.handleHideProductDetail} />
                 <div className="left-bar">
                     <Paper style={{ width: "100%", height: "100%" }}>
                         eeeee
@@ -47,6 +52,11 @@ class Stock extends Component {
                             </div>
                         </div>
                         <div className="managing-page-content-container">
+                            <div className="add-product-button">
+                                <Button variant="fab" color="primary" onClick={this.handleShowProductDetail("add")}>
+                                    <AddIcon />
+                                </Button>
+                            </div>
                             <Paper>
                                 <Table id="stock-table">
                                     <TableHead>
@@ -60,7 +70,7 @@ class Stock extends Component {
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
-                                        <TableRow onClick={this.handleShowProductDetail}>
+                                        <TableRow onClick={this.handleShowProductDetail("edit")}>
                                             <TableCell>aa</TableCell>
                                             <TableCell>bb</TableCell>
                                             <TableCell>cc</TableCell>
@@ -68,30 +78,7 @@ class Stock extends Component {
                                             <TableCell>ee</TableCell>
                                             <TableCell>ee</TableCell>
                                         </TableRow>
-                                        <TableRow onClick={this.handleShowProductDetail}>
-                                            <TableCell>aa</TableCell>
-                                            <TableCell>bb</TableCell>
-                                            <TableCell>cc</TableCell>
-                                            <TableCell>dd</TableCell>
-                                            <TableCell>ee</TableCell>
-                                            <TableCell>ee</TableCell>
-                                        </TableRow>
-                                        <TableRow onClick={this.handleShowProductDetail}>
-                                            <TableCell>aa</TableCell>
-                                            <TableCell>bb</TableCell>
-                                            <TableCell>cc</TableCell>
-                                            <TableCell>dd</TableCell>
-                                            <TableCell>ee</TableCell>
-                                            <TableCell>ee</TableCell>
-                                        </TableRow>
-                                        <TableRow onClick={this.handleShowProductDetail}>
-                                            <TableCell>aa</TableCell>
-                                            <TableCell>bb</TableCell>
-                                            <TableCell>cc</TableCell>
-                                            <TableCell>dd</TableCell>
-                                            <TableCell>ee</TableCell>
-                                            <TableCell>ee</TableCell>
-                                        </TableRow>
+
                                     </TableBody>
                                 </Table>
                             </Paper>

@@ -2,7 +2,7 @@ import React from "react";
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import * as api from '../../api'
+import * as api from '../../api/dhis2';
 import {
     fromProducts,
     fromCart

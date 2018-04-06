@@ -27,8 +27,8 @@ class Managing extends Component {
                 <ManagingHeaderBar />
                 <div className="body">
                     <Route exact path="/managing" component={Stock} />
-                    {/* <Route path="/managing/stock" component={Stock} />
-                    <Route path="/managing/transaction" component={Transaction} />
+                    <Route path="/managing/stock" component={Stock} />
+                    {/* <Route path="/managing/transaction" component={Transaction} />
                     <Route path="/managing/partner" component={Partner} />
                     <Route path="/managing/finance" component={Finance} />
                     <Route path="/managing/report" component={Report} /> */}
