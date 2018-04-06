@@ -6,7 +6,7 @@ import { metaData } from './metadata'
 import defaultConfig from './config'
 
 const endPoint = [
-    `optionSets/${metaData.PRODUCT}.json?paging=false`,
+    `optionSets/${metaData.PRODUCT.id}.json?paging=false`,
     "fields=options[id,name,code,attributeValues]"
 ].join("&");
 
@@ -19,9 +19,9 @@ const transfrom = data => {
                 name: d.name,
                 code: d.code,
                 translations: 'not-yet',
-                price: d.attributeValues.find(x => x.attribute.id == metaData.PRODUCT_PRICE).value,
-                inventory: d.attributeValues.find(x => x.attribute.id == metaData.PRODUCT_INVENTORY).value,
-                image_url: d.attributeValues.find(x => x.attribute.id == metaData.PRODUCT_IMAGE_URL).value
+                price: d.attributeValues.find(x => x.attribute.id == metaData.PRODUCT_PRICE.id).value,
+                inventory: d.attributeValues.find(x => x.attribute.id == metaData.PRODUCT_INVENTORY.id).value,
+                image: d.attributeValues.find(x => x.attribute.id == metaData.PRODUCT_IMAGE.id).value
             }
             return o;
         })
@@ -33,7 +33,8 @@ export const apiFetchOptions = (config = defaultConfig) => {
     return fetch(`${config.baseURL}/api/${endPoint}`, {
         headers: {
             Authorization: getAuthorizationHeader(config.username, config.password),
-            "X-Requested-With": "XMLHttpRequest"
+            "X-Requested-With": "XMLHttpRequest",
+            'Content-Type': 'multipart/form-data'
         }
     })
         .then(result => {

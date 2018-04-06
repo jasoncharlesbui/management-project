@@ -15,7 +15,9 @@ const acChangeQuantityUnsafe = (productId, value) => ({
 
 // thunks
 export const acAddToCart = productId => (dispatch, getState) => {
-    dispatch(acAddToCartUnsafe(productId));
+    if (getState().products.byIds[productId].inventory > 0) {
+        dispatch(acAddToCartUnsafe(productId));
+    }
 }
 
 export const acChangeQuantity = (productId, value) => (dispatch, getState) => {

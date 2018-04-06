@@ -10,6 +10,7 @@ import {
 import * as fromReducers from '../../reducers'
 
 import {
+    Badge,
     withStyles,
     colors
 } from "material-ui";
@@ -43,9 +44,15 @@ const BillItem = ({ product, index, onActionChangeQuantityClicked }) => {
                         <Remove style={{ width: 14, height: 14 }} />
                     </button>
                 </div>
+                <div className="cell-warning">
+                    <Badge badgeContent={'!'} color="error" className="warning">
+                        <span class="quantity-warning">Tooltip text</span>
+                    </Badge>
+                </div>
                 <div className="cell-change-price">
                     <button>{Number(product.price).toLocaleString()}</button>
                 </div>
+
                 <div className="cell-price">{(product.price * product.quantity).toLocaleString()}</div>
             </div>
         </div>
@@ -54,11 +61,9 @@ const BillItem = ({ product, index, onActionChangeQuantityClicked }) => {
 
 
 class BillTab extends React.Component {
-
     constructor(props) {
         super(props);
     }
-
     render() {
         const { products } = this.props;
         return (
