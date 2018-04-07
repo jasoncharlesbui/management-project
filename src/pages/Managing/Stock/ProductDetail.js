@@ -5,10 +5,11 @@ import TextField from 'material-ui/TextField';
 import SaveIcon from 'material-ui-icons/Save';
 import CloseIcon from 'material-ui-icons/Close';
 import DeleteIcon from 'material-ui-icons/Delete';
-import { addUpdateProduct, deleteProduct } from "../../api/dhis2/product.js";
-import { generateUid } from "../../api/dhis2/utils.js";
-import { numberWithThousands, replaceAll } from "../../api/utils";
+import { addUpdateProduct, deleteProduct } from "../../../api/dhis2/product.js";
+import { generateUid } from "../../../api/dhis2/utils.js";
+import { numberWithThousands, replaceAll } from "../../../api/utils";
 
+import "./ProductDetail.css";
 
 class ProductDetail extends Component {
     constructor() {

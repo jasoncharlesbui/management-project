@@ -2,11 +2,8 @@ import React, { Component } from 'react';
 import ManagingHeaderBar from "./ManagingHeaderBar.js";
 import ReportIcon from "material-ui-icons/InsertChart";
 
-import Stock from "./Stock.js";
-import Transaction from "./Transaction.js";
-import Partner from "./Partner.js";
-import Finance from "./Finance.js";
-import Report from "./Report.js";
+import Stock from "./Stock/Stock.js";
+
 
 import {
     BrowserRouter,

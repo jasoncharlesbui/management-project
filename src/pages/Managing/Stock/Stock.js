@@ -18,11 +18,13 @@ import PreviousPageIcon from 'material-ui-icons/KeyboardArrowLeft';
 import LastPageIcon from 'material-ui-icons/LastPage';
 import { LinearProgress } from 'material-ui/Progress';
 
-import { getProduct } from "../../api/dhis2/product.js";
-import { numberWithThousands } from "../../api/utils";
+import { getProduct, filterProductByNameOrCode } from "../../../api/dhis2/product.js";
+import { numberWithThousands } from "../../../api/utils";
 
 
 import ProductDetail from "./ProductDetail.js";
+import ProductFilter from "./ProductFilter.js";
+
 import "./Stock.css";
 
 
@@ -128,14 +130,40 @@ class Stock extends Component {
 
     }
 
+    handleSearchProduct = (value, property) => {
+        if (value === "") {
+            getProduct(1)
+                .then(result => {
+                    this.setState({
+                        loading: 0,
+                        pageCount: result.pageCount,
+                        products: result.products,
+                    })
+                    $("#total-products-info").html(`Tổng cộng: ${result.total}`);
+                    $("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
+                })
+        } else {
+            filterProductByNameOrCode(value, property)
+                .then(result => {
+                    this.setState({
+                        loading: 0,
+                        pageCount: result.pageCount,
+                        products: result.products,
+                    })
+                    $("#total-products-info").html(`Tổng cộng: ${result.total}`);
+                    $("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
+                })
+        }
+    }
+
     render() {
         return (
             <div className="stock-page-container">
                 <ProductDetail showed={this.state.showProductDetail} mode={this.state.productDetailMode} product={this.state.selectedProduct} handleHideProductDetail={this.handleHideProductDetail} />
                 <div className="left-bar">
-                    <Paper style={{ width: "100%", height: "100%" }}>
-                        eeeee
-                    </Paper>
+                    <ProductFilter
+                        handleSearchProduct={this.handleSearchProduct}
+                    />
                 </div>
                 <div className="right-bar">
                     <Paper style={{ width: "100%", height: "100%" }}>

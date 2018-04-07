@@ -16,6 +16,19 @@ const getProduct = (page) => {
         })
 }
 
+const filterProductByNameOrCode = (value, property) => {
+    let endPoint = `/api/options?filter=optionSet.id:eq:${metaData.PRODUCT.id}&paging=true&pageSize=14&page=${1}&fields=id,name,code,attributeValues&order=created:DESC&filter=${property}:ilike:${value}`;
+
+    return pullData(endPoint, 1)
+        .then(result => {
+            return {
+                products: transformFromDhis2(result),
+                pageCount: result.pager.pageCount,
+                total: result.pager.total
+            }
+        })
+}
+
 const addUpdateProduct = (product) => {
     let endPoint = `/api/metadata`;
     return pushData(endPoint, transformToDhis2(product))
@@ -84,5 +97,6 @@ const getAttribute = (product, attributeId) => {
 export {
     getProduct,
     addUpdateProduct,
-    deleteProduct
+    deleteProduct,
+    filterProductByNameOrCode
 }
