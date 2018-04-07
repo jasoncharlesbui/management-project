@@ -3,11 +3,16 @@ import { actionTypes } from '../constants/ActionTypes'
 
 const products = (state, action) => {
     switch (action.type) {
-        case actionTypes.ADD_TO_CART:
-            return {
-                ...state,
-                inventory: state.inventory - 1
-            }
+        // case actionTypes.ADD_TO_CART:
+        //     return {
+        //         ...state,
+        //         inventory: state.inventory - 1
+        //     }
+        // case actionTypes.CHANGE_QUANTITY:
+        //     return {
+        //         ...state,
+                
+        //     }
         default:
             return state;
     }

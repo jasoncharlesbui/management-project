@@ -12,12 +12,17 @@ const acChangeQuantityUnsafe = (productId, value) => ({
     value
 })
 
+export const acRemoveFromCart = (productId) => ({
+    type: actionTypes.REMOVE_FROM_CART,
+    productId
+})
+
 
 // thunks
 export const acAddToCart = productId => (dispatch, getState) => {
-    if (getState().products.byIds[productId].inventory > 0) {
-        dispatch(acAddToCartUnsafe(productId));
-    }
+    // if (getState().products.byIds[productId].inventory > 0) {
+    dispatch(acAddToCartUnsafe(productId));
+    // }
 }
 
 export const acChangeQuantity = (productId, value) => (dispatch, getState) => {

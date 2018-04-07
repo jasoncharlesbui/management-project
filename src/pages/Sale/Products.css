@@ -1,84 +1,90 @@
 /*  START - Products */
 
 .wrap-content .products-button {
-  position: fixed;
-  bottom: 4px;
-  left: 10px;
+    position: fixed;
+    bottom: 4px;
+    left: 10px;
 }
 
 .wrap-content .products-header {
-  display: flex;
-  height: auto;
+    display: flex;
+    height: auto;
 }
 
 .wrap-content div.gallery {
-  margin-left: 10px;
-  border: 0.5px solid #ccc;
-  float: left;
-  width: 145px;
+    margin-left: 10px;
+    border: 0.5px solid #ccc;
+    float: left;
+    width: 145px;
 }
 
 .wrap-content div.gallery:hover {
-  border: 2px solid #ffffff;
-  cursor: pointer;
+    border: 2px solid #ffffff;
+    cursor: pointer;
 }
 
 .wrap-content div.gallery img {
-  width: 100%;
-  height: 110px;
+    width: 100%;
+    height: 110px;
 }
 
 .wrap-content div.desc {
-  padding: 10px;
-  background-color: #ccc;
-  text-align: center;
+    padding: 10px;
+    background-color: #ccc;
+    text-align: center;
 }
 
 .item-total-price {
-  text-align: right;
+    text-align: right;
 }
 
 .item-price {
-  text-align: right;
-  width: 100%;
+    text-align: right;
+    width: 100%;
 }
 
 .products-content {
-  display: inline-block;
-  width: 100%;
-  position: absolute;
-  left: 10px;
-  top: 40px;
+    display: inline-block;
+    width: 100%;
+    position: absolute;
+    left: 10px;
+    top: 40px;
 }
 
 .product-item {
-  width: 140px;
-  height: 152px;
-  float: left;
-  list-style: none;
-  padding: 10px;
-  margin: 2px 0;
+    width: 140px;
+    height: 172px;
+    float: left;
+    list-style: none;
+    padding: 10px;
+    margin: 2px 0;
 }
 
 .product-item:hover {
-  background-color: #ffffff;
-  cursor: pointer;
+    background-color: #ffffff;
+    cursor: pointer;
 }
 
 .product-item img {
-  width: 100%;
+    width: 100%;
 }
 
 .product-item .container {
-  /* padding: 0.01em 16px */
+    /* padding: 0.01em 16px */
 }
 
 .product-item .product-price {
-  display: inline-block;  
-  color: #2196f3;
+    display: inline-block;
+    color: #2196f3;
 }
-.product-item .product-name {
 
+.product-item .product-name {
+    font-size: 14px;
+}
+
+.product-item .product-image {
+    width: 120px;
+    height: 80px;
 }
 
 /*  START - Products */

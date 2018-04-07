@@ -155,20 +155,26 @@
     width: 20px;
     margin: 2px 5px;
     font-weight: bolder;
+    cursor: pointer;
 }
 
-.item .cell-warning .warning:hover .quantity-warning {
+.item .cell-warning .badge-warning:hover .quantity-warning {
     visibility: visible;
 }
 
 .item .cell-warning .quantity-warning {
     position: absolute;
     z-index: 999;
-    background-color: #a4b0be;
+    background-color: #ffffff;
     visibility: hidden;
     width: 120px;
     line-height: 30px;
     text-align: center;
+    border: solid 1px #009432;
+}
+
+.item .cell-warning .badge-warning {
+    background-color: #ff7979;
 }
 
 .delete-btn,

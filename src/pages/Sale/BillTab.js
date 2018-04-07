@@ -19,11 +19,13 @@ import {
     Clear,
 } from "material-ui-icons";
 
-const BillItem = ({ product, index, onActionChangeQuantityClicked }) => {
+const BillItem = ({ product, index, onActionChangeQuantityClicked, onActionRemoveFromCartClicked }) => {
     return (
         <div className="item">
             <div className="cell-order">{index + 1}</div>
-            <div className="cell-action"><Clear style={{ width: 16, height: 16 }} /></div>
+            <div className="cell-action"><Clear
+                onClick={() => onActionRemoveFromCartClicked(product.id)}
+                style={{ width: 16, height: 16 }} /></div>
 
             <div className="row-product">
 
@@ -45,9 +47,11 @@ const BillItem = ({ product, index, onActionChangeQuantityClicked }) => {
                     </button>
                 </div>
                 <div className="cell-warning">
-                    <Badge badgeContent={'!'} color="error" className="warning">
-                        <span class="quantity-warning">Tooltip text</span>
-                    </Badge>
+                    {product.inventory < product.quantity &&
+                        <Badge badgeContent={'!'} color="error" className="badge-warning">
+                            <span className="quantity-warning">Tồn: {product.inventory}</span>
+                        </Badge>
+                    }
                 </div>
                 <div className="cell-change-price">
                     <button>{Number(product.price).toLocaleString()}</button>
@@ -75,6 +79,7 @@ class BillTab extends React.Component {
                             key={product.id}
                             product={product}
                             onActionChangeQuantityClicked={this.props.onActionChangeQuantity}
+                            onActionRemoveFromCartClicked={this.props.onActionRemoveFromCart}
                         />
                     )
                 })}
@@ -90,7 +95,8 @@ const mapStateToProps = state => {
 }
 
 const mapActionToProps = {
-    onActionChangeQuantity: fromCart.acChangeQuantity
+    onActionChangeQuantity: fromCart.acChangeQuantity,
+    onActionRemoveFromCart: fromCart.acRemoveFromCart
 }
 
 export default connect(mapStateToProps, mapActionToProps)(BillTab);
