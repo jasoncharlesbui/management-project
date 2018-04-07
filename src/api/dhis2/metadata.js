@@ -1,18 +1,18 @@
 export const metaData = {
     PRODUCT: {
-        type: "optionSet",
+        type: "options",
         id: "LIc6avjZYTm"
     },
     PRODUCT_PRICE: {
-        type: "option",
+        type: "attributes",
         id: "gAVTYhhXJcM"
     },
     PRODUCT_INVENTORY: {
-        type: "option",
+        type: "attributes",
         id: "Pytqm59iTMC"
     },
     PRODUCT_IMAGE: {
-        type: "option",
+        type: "attributes",
         id: "kTEz8fUzxjn"
     }
 };

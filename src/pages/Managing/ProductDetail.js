@@ -5,37 +5,85 @@ import TextField from 'material-ui/TextField';
 import SaveIcon from 'material-ui-icons/Save';
 import CloseIcon from 'material-ui-icons/Close';
 import DeleteIcon from 'material-ui-icons/Delete';
-import { Z_FILTERED } from 'zlib';
+import { addUpdateProduct, deleteProduct } from "../../api/dhis2/product.js";
+import { generateUid } from "../../api/dhis2/utils.js";
 
 
 class ProductDetail extends Component {
     constructor() {
         super();
         this.state = {
-            productId: "3333",
+            productId: "",
             productCode: "",
             productName: "",
             productOriginalPrice: "",
             productPrice: "",
-            productQuantity: "",
+            productInventory: "",
             productImage: "../images/add-image-icon.png"
         };
-    }
+    };
 
 
     handleChangeValue = (property) => (event) => {
         this.setState({
             [property]: event.target.value
         });
-    }
+    };
 
     handleSaveProduct = () => {
-        console.log(this.state);
-    }
+        addUpdateProduct(this.state)
+            .then(result => {
+                console.log(result);
+                if (this.props.mode === "edit") {
+                    this.props.handleHideProductDetail();
+                } else {
+                    this.setState({
+                        productId: generateUid(),
+                        productCode: "",
+                        productName: "",
+                        productOriginalPrice: "",
+                        productPrice: "",
+                        productInventory: "",
+                        productImage: "../images/add-image-icon.png"
+                    });
+                }
+            })
+    };
+
+    handleDeleteProduct = () => {
+        deleteProduct(this.state)
+            .then(result => {
+                console.log(result);
+                this.props.handleHideProductDetail();
+            })
+    };
 
     handleShowUploadImageDialog = () => {
         $("#product-image-selector").click();
-    }
+    };
+
+    componentWillReceiveProps = (nextProps) => {
+        if (nextProps.mode === "add") {
+            this.setState({
+                productId: generateUid(),
+                productCode: "",
+                productName: "",
+                productOriginalPrice: "",
+                productPrice: "",
+                productInventory: "",
+                productImage: "../images/add-image-icon.png"
+            });
+        } else {
+            this.setState({
+                productId: nextProps.product.productId,
+                productCode: nextProps.product.productCode,
+                productName: nextProps.product.productName,
+                productPrice: nextProps.product.productPrice,
+                productInventory: nextProps.product.productInventory,
+                productImage: nextProps.product.productImage
+            });
+        }
+    };
 
     handleUploadImage = (event) => {
         let valid = ["image/gif", "image/jpeg", "image/png"];
@@ -80,7 +128,7 @@ class ProductDetail extends Component {
                                     <img
                                         id="product-image"
                                         alt="Chưa có hình"
-                                        src="../images/1.png"
+                                        src={(this.state.productImage !== "") ? this.state.productImage : "../images/add-image-icon.png"}
                                         className="product-image"
                                         onClick={this.handleShowUploadImageDialog}
                                     />
@@ -137,8 +185,8 @@ class ProductDetail extends Component {
                                 label="Tồn kho"
                                 placeholder="Tồn kho"
                                 style={{ width: 300 }}
-                                value={this.state.productQuantity}
-                                onChange={this.handleChangeValue("productQuantity")}
+                                value={this.state.productInventory}
+                                onChange={this.handleChangeValue("productInventory")}
                             />
                         </div>
                     </div>
@@ -150,7 +198,9 @@ class ProductDetail extends Component {
                                 width: 100,
                                 color: "#FFFFFF",
                                 backgroundColor: "#f44336"
-                            }}>
+                            }}
+                            onClick={this.handleDeleteProduct}
+                        >
                             <DeleteIcon style={{ marginRight: 5 }} />
                             Xóa
                         </Button>
@@ -177,7 +227,6 @@ class ProductDetail extends Component {
                             <CloseIcon style={{ marginRight: 5 }} />
                             Đóng
                         </Button>
-
                     </div>
                 </div>
             </ div >
