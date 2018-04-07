@@ -106,7 +106,7 @@ class ManagingHeaderBar extends Component {
                         variant="raised">
                         <ManagingIcon style={{ marginRight: 10 }} />
                         Quản lý
-								</Button>
+					</Button>
                     <Link to="/sale">
                         <Button
                             variant="raised"
@@ -118,7 +118,7 @@ class ManagingHeaderBar extends Component {
                             }}>
                             <SaleIcon style={{ marginRight: 10 }} />
                             Bán hàng
-							</Button>
+						</Button>
                     </Link>
                 </div>
             </div>
