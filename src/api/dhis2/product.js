@@ -1,13 +1,19 @@
 import { pullData, pushData, editData } from "./utils.js";
 import { metaData } from "./metadata.js";
 import _ from "lodash";
+import { replaceAll } from "../utils";
+
 
 const getProduct = (page) => {
-    let endPoint = `/api/options?filter=optionSet.id:eq:${metaData.PRODUCT.id}&paging=true&pageSize=15&page=${page}&fields=id,name,code,attributeValues&order=created:DESC`;
+    let endPoint = `/api/options?filter=optionSet.id:eq:${metaData.PRODUCT.id}&paging=true&pageSize=14&page=${page}&fields=id,name,code,attributeValues&order=created:DESC`;
     return pullData(endPoint, 1)
         .then(result => {
-            return transformFromDhis2(result);
-        });
+            return {
+                products: transformFromDhis2(result),
+                pageCount: result.pager.pageCount,
+                total: result.pager.total
+            }
+        })
 }
 
 const addUpdateProduct = (product) => {
@@ -46,7 +52,7 @@ const transformToDhis2 = (product) => {
             name: product.productName,
             code: product.productCode,
             attributeValues: [{
-                value: product.productPrice,
+                value: parseInt(replaceAll(product.productPrice, ",", "")),
                 attribute: {
                     id: metaData.PRODUCT_PRICE.id
                 },

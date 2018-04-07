@@ -1,32 +1,53 @@
 /* global $ */
 import React, { Component } from 'react';
 import Paper from "material-ui/Paper";
-import Table, { TableBody, TableCell, TableHead, TableRow } from 'material-ui/Table';
+import Table, {
+    TableHead,
+    TableBody,
+    TableCell,
+    TableRow,
+} from 'material-ui/Table';
 import ProductIcon from "material-ui-icons/ShoppingBasket";
 import AddIcon from 'material-ui-icons/Add';
 import Button from 'material-ui/Button';
+import IconButton from 'material-ui/IconButton';
+
+import FirstPageIcon from 'material-ui-icons/FirstPage';
+import NextPageIcon from 'material-ui-icons/KeyboardArrowRight';
+import PreviousPageIcon from 'material-ui-icons/KeyboardArrowLeft';
+import LastPageIcon from 'material-ui-icons/LastPage';
 import { LinearProgress } from 'material-ui/Progress';
+
 import { getProduct } from "../../api/dhis2/product.js";
+import { numberWithThousands } from "../../api/utils";
+
 
 import ProductDetail from "./ProductDetail.js";
 import "./Stock.css";
+
+
 
 class Stock extends Component {
     constructor() {
         super();
         this.state = {
+            currentPage: 1,
+            pageCount: 0,
             loading: 1,
             showProductDetail: false,
             productDetailMode: "add",
             products: [],
             selectedProduct: {}
         };
-        getProduct(1)
-            .then(products => {
+        getProduct(this.state.currentPage)
+            .then(result => {
                 this.setState({
                     loading: 0,
-                    products: products
+                    pageCount: result.pageCount,
+                    products: result.products,
                 })
+                $("#total-products-info").html(`Tổng cộng: ${result.total}`);
+                $("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
             })
     }
 
@@ -37,8 +58,6 @@ class Stock extends Component {
             selectedProduct: product
         })
     }
-
-
 
     handleShowProductImage = (product) => (event) => {
         let height = $(window).height();
@@ -65,15 +84,49 @@ class Stock extends Component {
             loading: 1,
             showProductDetail: false
         })
-        getProduct(1)
-            .then(products => {
+        getProduct(this.state.currentPage)
+            .then(result => {
                 this.setState({
                     loading: 0,
-                    products: products
+                    products: result.products,
+                    pageCount: result.pageCount
                 })
+                $("#total-products-info").html(`Tổng cộng: ${result.total}`);
+                $("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
             })
     }
 
+    handlePaging = (action) => () => {
+        this.setState({
+            loading: 1,
+        });
+        let currentPage;
+        switch (action) {
+            case "first": currentPage = 1; break;
+            case "last": currentPage = this.state.pageCount; break;
+            case "next": currentPage = this.state.currentPage + 1; break;
+            case "previous": currentPage = this.state.currentPage - 1; break;
+        }
+
+        if (currentPage < 1) {
+            currentPage = 1;
+        }
+        if (currentPage > this.state.pageCount) {
+            currentPage = this.state.pageCount;
+        }
+        getProduct(currentPage)
+            .then(result => {
+                this.setState({
+                    currentPage: currentPage,
+                    loading: 0,
+                    products: result.products,
+                    pageCount: result.pageCount
+                })
+                $("#total-products-info").html(`Tổng cộng: ${result.total}`);
+                $("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
+            });
+
+    }
 
     render() {
         return (
@@ -112,8 +165,8 @@ class Stock extends Component {
                                             <TableCell>ID hàng hóa</TableCell>
                                             <TableCell>Mã hàng hóa</TableCell>
                                             <TableCell>Tên</TableCell>
-                                            <TableCell>Giá vốn</TableCell>
-                                            <TableCell>Giá bán</TableCell>
+                                            <TableCell>Giá vốn (VNĐ)</TableCell>
+                                            <TableCell>Giá bán (VNĐ)</TableCell>
                                             <TableCell>Tồn kho</TableCell>
                                         </TableRow>
                                     </TableHead>
@@ -130,7 +183,7 @@ class Stock extends Component {
                                                         <TableCell>{product.productCode}</TableCell>
                                                         <TableCell>{product.productName}</TableCell>
                                                         <TableCell></TableCell>
-                                                        <TableCell>{product.productPrice}</TableCell>
+                                                        <TableCell>{numberWithThousands(product.productPrice)}</TableCell>
                                                         <TableCell>{product.productInventory}</TableCell>
                                                     </TableRow>
                                                 }) : <TableRow>
@@ -145,6 +198,22 @@ class Stock extends Component {
                                     </TableBody>
                                 </Table>
                             </Paper>
+                            <div className="paging-container">
+                                <span id="total-products-info"></span>
+                                <IconButton>
+                                    <FirstPageIcon onClick={this.handlePaging("first")} />
+                                </IconButton>
+                                <IconButton>
+                                    <PreviousPageIcon onClick={this.handlePaging("previous")} />
+                                </IconButton>
+                                <span id="paging-info"></span>
+                                <IconButton>
+                                    <NextPageIcon onClick={this.handlePaging("next")} />
+                                </IconButton>
+                                <IconButton>
+                                    <LastPageIcon onClick={this.handlePaging("last")} />
+                                </IconButton>
+                            </div>
                         </div>
                     </Paper>
                 </div>

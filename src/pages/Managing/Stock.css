@@ -122,3 +122,14 @@
     font-weight: bold;
     margin-bottom: 20px;
 }
+
+.paging-container{
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#paging-info,
+ #total-products-info{
+    font-size:12px;
+}
+

@@ -7,6 +7,7 @@ import CloseIcon from 'material-ui-icons/Close';
 import DeleteIcon from 'material-ui-icons/Delete';
 import { addUpdateProduct, deleteProduct } from "../../api/dhis2/product.js";
 import { generateUid } from "../../api/dhis2/utils.js";
+import { numberWithThousands, replaceAll } from "../../api/utils";
 
 
 class ProductDetail extends Component {
@@ -25,9 +26,16 @@ class ProductDetail extends Component {
 
 
     handleChangeValue = (property) => (event) => {
-        this.setState({
-            [property]: event.target.value
-        });
+        if (property === "productPrice" || property === "productStockPrice") {
+            this.setState({
+                [property]: numberWithThousands(replaceAll(event.target.value, ",", ""))
+            });
+        } else {
+            this.setState({
+                [property]: event.target.value
+            });
+        }
+
     };
 
     handleSaveProduct = () => {
@@ -176,7 +184,7 @@ class ProductDetail extends Component {
                                 label="Giá bán"
                                 placeholder="Giá bán"
                                 style={{ width: 300 }}
-                                value={this.state.productPrice}
+                                value={numberWithThousands(this.state.productPrice)}
                                 onChange={this.handleChangeValue("productPrice")}
                             />
                             <br />
