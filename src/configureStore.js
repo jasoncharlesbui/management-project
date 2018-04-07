@@ -13,7 +13,7 @@ const configureStore = () => {
 
     const composeEnhancers = compose(
         applyMiddleware(...middleware),
-        window.devToolsExtension && window.devToolsExtension()
+        // window.devToolsExtension && window.devToolsExtension()
     )
 
     return createStore(

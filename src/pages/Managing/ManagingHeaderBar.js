@@ -92,7 +92,7 @@ class ManagingHeaderBar extends Component {
                     </Link>
                 </Menu>
                 <div className="app-title">
-                    Awesome App
+                    Management App
 				</div>
                 <div>
                     <Button
