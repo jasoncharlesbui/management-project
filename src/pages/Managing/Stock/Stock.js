@@ -131,6 +131,9 @@ class Stock extends Component {
     }
 
     handleSearchProduct = (value, property) => {
+        this.setState({
+            loading: 1,
+        })
         if (value === "") {
             getProduct(1)
                 .then(result => {

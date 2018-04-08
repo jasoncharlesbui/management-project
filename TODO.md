@@ -1,0 +1,5 @@
+- Multiple price editor
+- Product group (group id, level)
+- product active - inactive
+- Phieu kiem kho (hỏi chang xinh)
+- Number of record
