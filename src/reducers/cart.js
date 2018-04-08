@@ -49,6 +49,7 @@ const cart = (state = initialState, action) => {
         case 'not-yet':
             return state;
         default:
+            localStorage.setItem("cart", JSON.stringify(state));
             return {
                 addedIds: addedIds(state.addedIds, action),
                 quantityByIds: quantityByIds(state.quantityByIds, action)

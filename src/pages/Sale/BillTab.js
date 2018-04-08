@@ -67,6 +67,7 @@ const BillItem = ({ product, index, onActionChangeQuantityClicked, onActionRemov
 class BillTab extends React.Component {
     constructor(props) {
         super(props);
+        console.log(JSON.parse(localStorage.getItem("cart")));
     }
     render() {
         const { products } = this.props;
