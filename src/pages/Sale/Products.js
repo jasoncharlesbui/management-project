@@ -90,6 +90,7 @@ class Products extends React.Component {
     }
 
     handleDrawerToggle = (e) => {
+        this.props.onExpandCart();
         this.setState(prevState => ({
             open: !prevState.open
         }));
@@ -110,7 +111,7 @@ class Products extends React.Component {
             >
 
                 <div className="products-header">
-                    <IconButton onClick={this.handleDrawerToggle}>
+                    <IconButton onClick={() => this.handleDrawerToggle()}>
                         <KeyboardArrowDown />
                     </IconButton>
                     <Subheader>Danh mục</Subheader>

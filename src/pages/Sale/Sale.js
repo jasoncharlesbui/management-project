@@ -126,7 +126,8 @@ class LeftPager extends React.Component {
             value: 0,
             listBills: [{
                 title: "Hóa đơn"
-            }]
+            }],
+            drawerActive: true
         };
     }
 
@@ -146,9 +147,16 @@ class LeftPager extends React.Component {
         }));
     }
 
+    expandShoppingCart = (e) => {
+        this.setState(prevState => ({
+            drawerActive: !prevState.drawerActive
+        }));
+    }
+
     render() {
         const { styles } = this.props;
         const { listBills, value } = this.state;
+        let shoppingCartClassName = this.state.drawerActive ? "shopping-cart" : "shopping-cart shopping-cart-expand";
         return (
             <div className="left-content">
                 <Tabs
@@ -176,17 +184,18 @@ class LeftPager extends React.Component {
                         }}
                     />
                 </Tabs>
-
-                {listBills.map((bill, idex) => {
-                    return (
-                        <span key={idex}>
-                            {value === idex && <BillTab list > Bill {`${idex + 1}`}</BillTab>}
-                        </span>
-                    )
-                })}
-
+                <div className={shoppingCartClassName}>
+                    {listBills.map((bill, idex) => {
+                        return (
+                            <span key={idex}>
+                                {value === idex && <BillTab list > Bill {`${idex + 1}`}</BillTab>}
+                            </span>
+                        )
+                    })}
+                </div>
                 <Products
                     onRef={ref => (this.child = ref)}
+                    onExpandCart={this.expandShoppingCart}
                 >
                 </Products>
 

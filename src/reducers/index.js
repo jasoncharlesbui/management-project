@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux'
 import products, * as fromProducts from './products'
 import cart, * as fromCart from './cart'
+import { saveState } from '../localStorage'
 
 // action types
 // export const actionTypes = {

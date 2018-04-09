@@ -1,17 +1,23 @@
 import { actionTypes } from '../constants/ActionTypes'
-
-const initialState = {
-    addedIds: [],
-    quantityByIds: {}
-}
-
+import { saveState, loadState } from '../localStorage';
+import _ from 'lodash';
+// console.log(JSON.parse(localStorage.getItem('cart')));
+const initialState = (
+    {
+        addedIds: [],
+        quantityByIds: {}
+    });
+// JSON.parse(localStorage.getItem('cart')) ||
+// localStorage.removeItem('cart');
+// localStorage.getItem('cart') ||
 const addedIds = (state = initialState.addedIds, action) => {
     switch (action.type) {
         case actionTypes.ADD_TO_CART:
             if (state.indexOf(action.productId) !== -1) {
                 return state;
             }
-            return [...state, action.productId];
+            let result = [...state, action.productId];
+            return result;
         case actionTypes.REMOVE_FROM_CART:
             return state.filter(id => id !== action.productId);
         default:
@@ -23,10 +29,11 @@ const quantityByIds = (state = initialState.quantityByIds, action) => {
     switch (action.type) {
         case actionTypes.ADD_TO_CART: {
             const { productId } = action;
-            return {
+            let result = {
                 ...state,
                 [productId]: (state[productId] || 0) + 1
             };
+            return result;
         }
         case actionTypes.CHANGE_QUANTITY: {
             const { productId, value } = action;
@@ -49,11 +56,12 @@ const cart = (state = initialState, action) => {
         case 'not-yet':
             return state;
         default:
-            localStorage.setItem("cart", JSON.stringify(state));
-            return {
+            let cart = {
                 addedIds: addedIds(state.addedIds, action),
                 quantityByIds: quantityByIds(state.quantityByIds, action)
             }
+            localStorage.setItem('cart', cart);
+            return cart;
     }
 }
 

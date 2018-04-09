@@ -11,6 +11,10 @@
     padding-right: 4px;
 }
 
+.shopping-cart-expand {
+    height: calc(100% - 120px);
+}
+
 .shopping-list {
     box-sizing: border-box;
 }

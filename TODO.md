@@ -9,7 +9,7 @@ Managing - product
 Sale - Cart
 - Cart data (using local storage)
 - Scaling product image 
-- Expand cart container when collapsing product list
+- Expand cart container when collapsing product list (DONE)
 - Fix bugs (tab scrolling)
 - Price changing on bill
 - Search product to add to cart

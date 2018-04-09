@@ -3,6 +3,8 @@ import { createLogger } from 'redux-logger';
 import thunk from 'redux-thunk';
 
 import reducer from './reducers'
+import { loadState, saveState } from './localStorage'
+
 
 const configureStore = () => {
     const middleware = [thunk];
@@ -16,10 +18,12 @@ const configureStore = () => {
         // window.devToolsExtension && window.devToolsExtension()
     )
 
-    return createStore(
+    const persistedState = loadState();
+    const store = createStore(
         reducer,
         composeEnhancers
-    )
+    );
+    return store;
 }
 
 export default configureStore;
