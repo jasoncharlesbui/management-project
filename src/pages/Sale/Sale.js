@@ -20,6 +20,8 @@ import Input from "material-ui/Input/Input";
 import Products from "./Products.js";
 import BillTab from "./BillTab.js";
 
+import Loader from '../../commons/Loader'
+
 const styles = {
     root: {
         width: "100%",
@@ -127,7 +129,8 @@ class LeftPager extends React.Component {
             listBills: [{
                 title: "Hóa đơn"
             }],
-            drawerActive: true
+            drawerActive: true,
+            isLoading: true
         };
     }
 
@@ -153,9 +156,15 @@ class LeftPager extends React.Component {
         }));
     }
 
+    setLoadingStatus = (value) => {
+        this.setState({
+            isLoading: value
+        })
+    }
+
     render() {
         const { styles } = this.props;
-        const { listBills, value } = this.state;
+        const { listBills, value, isLoading } = this.state;
         let shoppingCartClassName = this.state.drawerActive ? "shopping-cart" : "shopping-cart shopping-cart-expand";
         return (
             <div className="left-content">
@@ -184,18 +193,20 @@ class LeftPager extends React.Component {
                         }}
                     />
                 </Tabs>
-                <div className={shoppingCartClassName}>
+                {isLoading == false && <div className={shoppingCartClassName}>
                     {listBills.map((bill, idex) => {
                         return (
                             <span key={idex}>
-                                {value === idex && <BillTab list > Bill {`${idex + 1}`}</BillTab>}
+                                {value === idex && <BillTab key={idex} > Bill {`${idex + 1}`}</BillTab>}
                             </span>
                         )
                     })}
-                </div>
+                </div>}
+                <Loader open={isLoading} size={80} />
                 <Products
                     onRef={ref => (this.child = ref)}
                     onExpandCart={this.expandShoppingCart}
+                    onSetLoadingStatus={this.setLoadingStatus}
                 >
                 </Products>
 

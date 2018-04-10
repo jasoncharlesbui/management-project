@@ -83,6 +83,9 @@ class Products extends React.Component {
             .then((result) => {
                 // console.log(result);
                 store.dispatch(fromProducts.acGetProducts(result));
+            })
+            .then(() => {
+                this.props.onSetLoadingStatus(false);
             });
     }
     componentWillUnmount() {

@@ -2,13 +2,13 @@ import { actionTypes } from '../constants/ActionTypes'
 import { saveState, loadState } from '../localStorage';
 import _ from 'lodash';
 // console.log(JSON.parse(localStorage.getItem('cart')));
-const initialState = (
+const initialState = (JSON.parse(localStorage.getItem('cart')) ||
     {
         addedIds: [],
         quantityByIds: {}
     });
 // JSON.parse(localStorage.getItem('cart')) ||
-// localStorage.removeItem('cart');
+localStorage.removeItem('cart');
 // localStorage.getItem('cart') ||
 const addedIds = (state = initialState.addedIds, action) => {
     switch (action.type) {
@@ -60,7 +60,7 @@ const cart = (state = initialState, action) => {
                 addedIds: addedIds(state.addedIds, action),
                 quantityByIds: quantityByIds(state.quantityByIds, action)
             }
-            localStorage.setItem('cart', cart);
+            localStorage.setItem('cart', JSON.stringify(cart));
             return cart;
     }
 }
