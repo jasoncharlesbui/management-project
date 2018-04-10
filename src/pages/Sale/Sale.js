@@ -2,6 +2,7 @@ import React from "react";
 import "./Sale.css";
 import PropTypes from "prop-types";
 import {
+    AppBar,
     Toolbar,
     Grid,
     InputAdornment,
@@ -143,7 +144,6 @@ class LeftPager extends React.Component {
     handleAddBill = () => {
         this.state.listBills.push({
             title: "Hóa đơn",
-            list: {}
         })
         this.setState(prevState => ({
             listBills: this.state.listBills
@@ -182,7 +182,6 @@ class LeftPager extends React.Component {
                     {listBills.map((bill, idex) => (
                         <Tab key={idex} label={`${bill.title} ${idex + 1}`} className="App-Tab" />
                     ))}
-
                     <Tab
                         label="+"
                         onClick={this.handleAddBill}
