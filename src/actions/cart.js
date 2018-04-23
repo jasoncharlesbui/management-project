@@ -26,5 +26,7 @@ export const acAddToCart = productId => (dispatch, getState) => {
 }
 
 export const acChangeQuantity = (productId, value) => (dispatch, getState) => {
-    dispatch(acChangeQuantityUnsafe(productId, value));
+    if (value >= 1) {
+        dispatch(acChangeQuantityUnsafe(productId, value));
+    }
 }
