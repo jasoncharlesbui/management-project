@@ -1,10 +1,13 @@
 /* global $ */
 import React, { Component } from 'react';
 import Button from 'material-ui/Button';
+import { FormControlLabel } from 'material-ui/Form';
 import TextField from 'material-ui/TextField';
+import Checkbox from 'material-ui/Checkbox';
 import SaveIcon from 'material-ui-icons/Save';
 import CloseIcon from 'material-ui-icons/Close';
 import DeleteIcon from 'material-ui-icons/Delete';
+
 import { addUpdateProduct, deleteProduct } from "../../../api/dhis2/product.js";
 import { generateUid } from "../../../api/dhis2/utils.js";
 import { numberWithThousands, replaceAll } from "../../../api/utils";
@@ -20,20 +23,31 @@ class ProductDetail extends Component {
             productName: "",
             productOriginalPrice: "",
             productPrice: "",
+            productActive: "",
             productInventory: "",
             productImage: "../images/add-image-icon.png"
         };
     };
 
 
-    handleChangeValue = (property) => (event) => {
+    handleChangeValue = (property, valueType) => (event) => {
+        let value = "";
+        switch (valueType) {
+            case "TEXT":
+            case "NUMBER":
+                value = "value";
+                break;
+            case "BOOLEAN":
+                value = "checked";
+                break;
+        }
         if (property === "productPrice" || property === "productStockPrice") {
             this.setState({
-                [property]: numberWithThousands(replaceAll(event.target.value, ",", ""))
+                [property]: numberWithThousands(replaceAll(event.target[value], ",", ""))
             });
         } else {
             this.setState({
-                [property]: event.target.value
+                [property]: event.target[value]
             });
         }
 
@@ -52,6 +66,7 @@ class ProductDetail extends Component {
                         productName: "",
                         productOriginalPrice: "",
                         productPrice: "",
+                        productActive: "",
                         productInventory: "",
                         productImage: "../images/add-image-icon.png"
                     });
@@ -79,6 +94,7 @@ class ProductDetail extends Component {
                 productName: "",
                 productOriginalPrice: "",
                 productPrice: "",
+                productActive: "",
                 productInventory: "",
                 productImage: "../images/add-image-icon.png"
             });
@@ -88,6 +104,7 @@ class ProductDetail extends Component {
                 productCode: nextProps.product.productCode,
                 productName: nextProps.product.productName,
                 productPrice: nextProps.product.productPrice,
+                productActive: nextProps.product.productActive,
                 productInventory: nextProps.product.productInventory,
                 productImage: nextProps.product.productImage
             });
@@ -159,7 +176,7 @@ class ProductDetail extends Component {
                                 placeholder="Mã hàng hoá"
                                 style={{ width: 300 }}
                                 value={this.state.productCode}
-                                onChange={this.handleChangeValue("productCode")}
+                                onChange={this.handleChangeValue("productCode", "TEXT")}
                             />
                             <br />
                             <br />
@@ -168,7 +185,7 @@ class ProductDetail extends Component {
                                 placeholder="Tên hàng hoá"
                                 style={{ width: 300 }}
                                 value={this.state.productName}
-                                onChange={this.handleChangeValue("productName")}
+                                onChange={this.handleChangeValue("productName", "TEXT")}
                             />
                             <br />
                             <br />
@@ -177,7 +194,7 @@ class ProductDetail extends Component {
                                 placeholder="Giá vốn"
                                 style={{ width: 300 }}
                                 value={this.state.productOriginalPrice}
-                                onChange={this.handleChangeValue("productOriginalPrice")}
+                                onChange={this.handleChangeValue("productOriginalPrice", "NUMBER")}
                             />
                             <br />
                             <br />
@@ -186,7 +203,18 @@ class ProductDetail extends Component {
                                 placeholder="Giá bán"
                                 style={{ width: 300 }}
                                 value={numberWithThousands(this.state.productPrice)}
-                                onChange={this.handleChangeValue("productPrice")}
+                                onChange={this.handleChangeValue("productPrice", "NUMBER")}
+                            />
+                            <br />
+                            <br />
+                            <FormControlLabel
+                                control={
+                                    <Checkbox
+                                        checked={this.state.productActive}
+                                        onChange={this.handleChangeValue("productActive", "BOOLEAN")}
+                                    />
+                                }
+                                label="Hàng đang kinh doanh"
                             />
                             <br />
                             <br />
@@ -195,7 +223,7 @@ class ProductDetail extends Component {
                                 placeholder="Tồn kho"
                                 style={{ width: 300 }}
                                 value={this.state.productInventory}
-                                onChange={this.handleChangeValue("productInventory")}
+                                onChange={this.handleChangeValue("productInventory", "NUMBER")}
                             />
                         </div>
                     </div>

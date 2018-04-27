@@ -199,6 +199,7 @@ class Stock extends Component {
                                             <TableCell>Giá vốn (VNĐ)</TableCell>
                                             <TableCell>Giá bán (VNĐ)</TableCell>
                                             <TableCell>Tồn kho</TableCell>
+                                            <TableCell>Trạng thái</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
@@ -216,6 +217,13 @@ class Stock extends Component {
                                                         <TableCell></TableCell>
                                                         <TableCell>{numberWithThousands(product.productPrice)}</TableCell>
                                                         <TableCell>{product.productInventory}</TableCell>
+                                                        <TableCell>
+                                                            {
+                                                                (product.productActive) ?
+                                                                    <span className="product-active">Đang kinh doanh</span> :
+                                                                    <span className="product-inactive">Ngừng kinh doanh</span>
+                                                            }
+                                                        </TableCell>
                                                     </TableRow>
                                                 }) : <TableRow>
                                                     <TableCell></TableCell>

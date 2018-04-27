@@ -3,7 +3,6 @@
  */
 import config from './config'
 
-import _products from './products.json'
 import * as fromOption from './options'
 
 
@@ -11,7 +10,7 @@ import * as fromOption from './options'
 const TIMEOUT = 100
 
 
-export const getProducts = (cb, timeout) => setTimeout(() => cb(_products), timeout || TIMEOUT);
+//export const getProducts = (cb, timeout) => setTimeout(() => cb(_products), timeout || TIMEOUT);
 
 export {
     fromOption

@@ -28,6 +28,8 @@ class ProductFilter extends Component {
     constructor() {
         super();
         this.state = {
+            showActiveProducts: true,
+            showInactiveProducts: false,
             searchSection: true,
             displaySection: true
         }
@@ -42,6 +44,9 @@ class ProductFilter extends Component {
 
     handleSearchProduct = (property) => (event) => {
         this.props.handleSearchProduct(event.target.value, property);
+    }
+
+    handleFilterProductByStatus = (event) => {
     }
 
 
@@ -112,8 +117,8 @@ class ProductFilter extends Component {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={this.state.gilad}
-                                                value="gilad"
+                                                checked={this.state.showActiveProducts}
+                                                onChange={this.handleFilterProductByStatus("active")}
                                                 color="primary"
                                             />
                                         }
@@ -122,8 +127,8 @@ class ProductFilter extends Component {
                                     <FormControlLabel
                                         control={
                                             <Checkbox
-                                                checked={this.state.jason}
-                                                value="jason"
+                                                checked={this.state.showInactiveProducts}
+                                                onChange={this.handleFilterProductByStatus("inactive")}
                                                 color="primary"
                                             />
                                         }

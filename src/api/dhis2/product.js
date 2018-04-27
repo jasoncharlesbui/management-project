@@ -51,6 +51,7 @@ const transformFromDhis2 = (result) => {
             productCode: product.code,
             productName: product.name,
             productPrice: getAttribute(product, metaData.PRODUCT_PRICE.id),
+            productActive: (getAttribute(product, metaData.PRODUCT_ACTIVE.id) == "true"),
             productInventory: getAttribute(product, metaData.PRODUCT_INVENTORY.id),
             productImage: getAttribute(product, metaData.PRODUCT_IMAGE.id)
         })
@@ -73,6 +74,11 @@ const transformToDhis2 = (product) => {
                 value: product.productInventory,
                 attribute: {
                     id: metaData.PRODUCT_INVENTORY.id
+                }
+            }, {
+                value: product.productActive.toString(),
+                attribute: {
+                    id: metaData.PRODUCT_ACTIVE.id
                 }
             }, {
                 value: product.productImage,

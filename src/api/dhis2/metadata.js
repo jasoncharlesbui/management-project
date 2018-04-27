@@ -7,6 +7,10 @@ export const metaData = {
         type: "attributes",
         id: "gAVTYhhXJcM"
     },
+    PRODUCT_ACTIVE: {
+        type: "attributes",
+        id: "F8jJ4EG2RUT"
+    },
     PRODUCT_INVENTORY: {
         type: "attributes",
         id: "Pytqm59iTMC"

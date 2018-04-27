@@ -54,3 +54,11 @@
 #paging-info, #total-products-info {
     font-size: 12px;
 }
+
+.product-active {
+    color: green;
+}
+
+.product-inactive {
+    color: red;
+}

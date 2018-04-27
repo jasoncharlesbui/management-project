@@ -3,7 +3,7 @@ Managing - product
 - Product group (group id, level)
 - product active - inactive
 - Phieu kiem kho (hỏi chang xinh)
-- Number of record
+- Number of records
 
 
 Sale - Cart
