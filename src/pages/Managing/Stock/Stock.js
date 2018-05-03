@@ -7,6 +7,12 @@ import Table, {
     TableCell,
     TableRow,
 } from 'material-ui/Table';
+import TextField from 'material-ui/TextField';
+import Tooltip from 'material-ui/Tooltip';
+import Snackbar from 'material-ui/Snackbar';
+
+
+
 import ProductIcon from "material-ui-icons/ShoppingBasket";
 import AddIcon from 'material-ui-icons/Add';
 import Button from 'material-ui/Button';
@@ -18,8 +24,8 @@ import PreviousPageIcon from 'material-ui-icons/KeyboardArrowLeft';
 import LastPageIcon from 'material-ui-icons/LastPage';
 import { LinearProgress } from 'material-ui/Progress';
 
-import { getProduct, filterProductByNameOrCode } from "../../../api/dhis2/product.js";
-import { numberWithThousands } from "../../../api/utils";
+import { getProduct, addUpdateProduct } from "../../../api/dhis2/product.js";
+import { numberWithThousands, replaceAll, isNumber } from "../../../api/utils";
 
 
 import ProductDetail from "./ProductDetail.js";
@@ -39,14 +45,18 @@ class Stock extends Component {
             showProductDetail: false,
             productDetailMode: "add",
             products: [],
-            selectedProduct: {}
+            numberOfRecords: 15,
+            selectedProduct: {},
+            filters: {},
+            snackbar: false
         };
-        getProduct(this.state.currentPage)
+        getProduct(this.state.filters, this.state.currentPage, this.state.numberOfRecords)
             .then(result => {
                 this.setState({
                     loading: 0,
                     pageCount: result.pageCount,
                     products: result.products,
+                    filters: {}
                 })
                 $("#total-products-info").html(`Tổng cộng: ${result.total}`);
                 $("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
@@ -72,8 +82,6 @@ class Stock extends Component {
         $("#small-product-image-container").css("z-index", 9999);
         $("#small-product-image-container").css("top", top);
         $("#small-product-image-container").css("left", left);
-
-
     }
 
     handleHideProductImage = () => {
@@ -86,7 +94,7 @@ class Stock extends Component {
             loading: 1,
             showProductDetail: false
         })
-        getProduct(this.state.currentPage)
+        getProduct(this.state.filters, this.state.currentPage, this.state.numberOfRecords)
             .then(result => {
                 this.setState({
                     loading: 0,
@@ -99,9 +107,7 @@ class Stock extends Component {
     }
 
     handlePaging = (action) => () => {
-        this.setState({
-            loading: 1,
-        });
+
         let currentPage;
         switch (action) {
             case "first": currentPage = 1; break;
@@ -112,11 +118,16 @@ class Stock extends Component {
 
         if (currentPage < 1) {
             currentPage = 1;
+            return;
         }
         if (currentPage > this.state.pageCount) {
             currentPage = this.state.pageCount;
+            return;
         }
-        getProduct(currentPage)
+        this.setState({
+            loading: 1,
+        });
+        getProduct(this.state.filters, currentPage, this.state.numberOfRecords)
             .then(result => {
                 this.setState({
                     currentPage: currentPage,
@@ -130,42 +141,106 @@ class Stock extends Component {
 
     }
 
-    handleSearchProduct = (value, property) => {
+    handleFilterProduct = (value, property, operator, type) => {
+        let filters = this.state.filters;
+        if (type === "property") {
+            filters[property] = {
+                type: "property",
+                property: property,
+                operator: operator,
+                value: value
+            }
+        } else {
+            filters[property] = {
+                type: "attribute",
+                operator: operator,
+                value: value
+            }
+        }
         this.setState({
             loading: 1,
-        })
-        if (value === "") {
-            getProduct(1)
-                .then(result => {
-                    this.setState({
-                        loading: 0,
-                        pageCount: result.pageCount,
-                        products: result.products,
-                    })
-                    $("#total-products-info").html(`Tổng cộng: ${result.total}`);
-                    $("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
+            filters: filters
+        });
+        getProduct(filters, 1, this.state.numberOfRecords)
+            .then(result => {
+                this.setState({
+                    loading: 0,
+                    currentPage: 1,
+                    pageCount: result.pageCount,
+                    products: result.products,
                 })
-        } else {
-            filterProductByNameOrCode(value, property)
+                $("#total-products-info").html(`Tổng cộng: ${result.total}`);
+                $("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
+            })
+    }
+
+    handleChangeNumberOfRecords = (numberOfRecords) => {
+        this.setState({
+            loading: 1,
+            currentPage: 1,
+            numberOfRecords: numberOfRecords
+        });
+        getProduct(this.state.filters, 1, numberOfRecords)
+            .then(result => {
+                this.setState({
+                    loading: 0,
+                    pageCount: result.pageCount,
+                    products: result.products,
+                })
+                $("#total-products-info").html(`Tổng cộng: ${result.total}`);
+                $("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
+            });
+    }
+
+    handleQuickEditPrice = (index) => (event) => {
+        let products = this.state.products;
+        if (!isNumber(replaceAll(event.target.value, ",", ""))) {
+            return;
+        }
+        products[index].productPrice = replaceAll(event.target.value, ",", "");
+        this.setState({
+            products: products
+        });
+    }
+
+    handleSaveQuickEditPrice = (index) => (event) => {
+        let keyCode = event.which || event.keyCode;
+        if (keyCode === 13) {
+            addUpdateProduct(this.state.products[index], "edit")
                 .then(result => {
                     this.setState({
-                        loading: 0,
-                        pageCount: result.pageCount,
-                        products: result.products,
+                        snackbar: true
                     })
-                    $("#total-products-info").html(`Tổng cộng: ${result.total}`);
-                    $("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
                 })
         }
+
+    }
+
+    handleCloseSnackbar = () => {
+        this.setState({
+            snackbar: false
+        })
     }
 
     render() {
         return (
             <div className="stock-page-container">
                 <ProductDetail showed={this.state.showProductDetail} mode={this.state.productDetailMode} product={this.state.selectedProduct} handleHideProductDetail={this.handleHideProductDetail} />
+                <Snackbar
+                    style={{ textAlign: "center" }}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    open={this.state.snackbar}
+                    autoHideDuration={3000}
+                    onClose={this.handleCloseSnackbar}
+                    message={<span>Lưu thành công</span>}
+                />
                 <div className="left-bar">
                     <ProductFilter
-                        handleSearchProduct={this.handleSearchProduct}
+                        handleFilterProduct={this.handleFilterProduct}
+                        handleChangeNumberOfRecords={this.handleChangeNumberOfRecords}
                     />
                 </div>
                 <div className="right-bar">
@@ -178,6 +253,7 @@ class Stock extends Component {
                                 Quản lý hàng hóa
                             </div>
                         </div>
+                        <LinearProgress style={{ opacity: this.state.loading }} />
                         <div className="managing-page-content-container">
                             <div className="add-product-button">
                                 <Button variant="fab" color="primary" onClick={this.handleShowProductDetail("add", {})}>
@@ -185,7 +261,6 @@ class Stock extends Component {
                                 </Button>
                             </div>
                             <Paper>
-                                <LinearProgress style={{ opacity: this.state.loading }} />
                                 <div id="small-product-image-container">
                                     <div id="small-product-name"></div>
                                     <img id="small-product-image" src="" />
@@ -197,32 +272,59 @@ class Stock extends Component {
                                             <TableCell>Mã hàng hóa</TableCell>
                                             <TableCell>Tên</TableCell>
                                             <TableCell>Giá vốn (VNĐ)</TableCell>
-                                            <TableCell>Giá bán (VNĐ)</TableCell>
-                                            <TableCell>Tồn kho</TableCell>
                                             <TableCell>Trạng thái</TableCell>
+                                            <TableCell>Tồn kho</TableCell>
+                                            <TableCell>Giá bán (VNĐ)</TableCell>
                                         </TableRow>
                                     </TableHead>
                                     <TableBody>
                                         {
                                             (this.state.products.length != 0) ?
-                                                this.state.products.map(product => {
-                                                    return <TableRow
-                                                        onClick={this.handleShowProductDetail("edit", product)}
-                                                        onMouseMove={this.handleShowProductImage(product)}
-                                                        onMouseOut={this.handleHideProductImage}
-                                                    >
-                                                        <TableCell>{product.productId}</TableCell>
-                                                        <TableCell>{product.productCode}</TableCell>
-                                                        <TableCell>{product.productName}</TableCell>
-                                                        <TableCell></TableCell>
-                                                        <TableCell>{numberWithThousands(product.productPrice)}</TableCell>
-                                                        <TableCell>{product.productInventory}</TableCell>
-                                                        <TableCell>
+                                                this.state.products.map((product, index) => {
+                                                    return <TableRow>
+                                                        <TableCell
+                                                            onMouseMove={this.handleShowProductImage(product)}
+                                                            onMouseOut={this.handleHideProductImage}
+                                                            onClick={this.handleShowProductDetail("edit", product)}
+                                                        >
+                                                            {product.productId}
+                                                        </TableCell>
+                                                        <TableCell onMouseMove={this.handleShowProductImage(product)}
+                                                            onMouseOut={this.handleHideProductImage}
+                                                            onClick={this.handleShowProductDetail("edit", product)}>
+                                                            {product.productCode}
+                                                        </TableCell>
+                                                        <TableCell onMouseMove={this.handleShowProductImage(product)}
+                                                            onMouseOut={this.handleHideProductImage}
+                                                            onClick={this.handleShowProductDetail("edit", product)}>
+                                                            {product.productName}
+                                                        </TableCell>
+                                                        <TableCell onMouseMove={this.handleShowProductImage(product)}
+                                                            onMouseOut={this.handleHideProductImage}
+                                                            onClick={this.handleShowProductDetail("edit", product)}>
+                                                        </TableCell>
+                                                        <TableCell onMouseMove={this.handleShowProductImage(product)}
+                                                            onMouseOut={this.handleHideProductImage}
+                                                            onClick={this.handleShowProductDetail("edit", product)}>
                                                             {
                                                                 (product.productActive) ?
                                                                     <span className="product-active">Đang kinh doanh</span> :
                                                                     <span className="product-inactive">Ngừng kinh doanh</span>
                                                             }
+                                                        </TableCell>
+                                                        <TableCell onMouseMove={this.handleShowProductImage(product)}
+                                                            onMouseOut={this.handleHideProductImage}
+                                                            onClick={this.handleShowProductDetail("edit", product)}>
+                                                            {product.productInventory}
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Tooltip title="Nhấn enter để lưu">
+                                                                <TextField
+                                                                    value={numberWithThousands(this.state.products[index].productPrice)}
+                                                                    onChange={this.handleQuickEditPrice(index)}
+                                                                    onKeyUp={this.handleSaveQuickEditPrice(index)}
+                                                                />
+                                                            </Tooltip>
                                                         </TableCell>
                                                     </TableRow>
                                                 }) : <TableRow>
