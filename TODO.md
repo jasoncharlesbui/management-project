@@ -1,5 +1,5 @@
 Managing - product
-- Multiple price editor
+- Multiple price editor (DONE)
 - product active - inactive (DONE)
 - Number of records (DONE)
 
