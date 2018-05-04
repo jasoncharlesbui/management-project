@@ -1,9 +1,7 @@
 Managing - product
-- Multiple price editor
-- Product group (group id, level)
-- product active - inactive
-- Phieu kiem kho (hỏi chang xinh)
-- Number of records
+- Multiple price editor (DONE)
+- product active - inactive (DONE)
+- Number of records (DONE)
 
 
 Sale - Cart

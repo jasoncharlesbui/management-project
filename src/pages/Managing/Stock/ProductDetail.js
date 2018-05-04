@@ -10,7 +10,7 @@ import DeleteIcon from 'material-ui-icons/Delete';
 
 import { addUpdateProduct, deleteProduct } from "../../../api/dhis2/product.js";
 import { generateUid } from "../../../api/dhis2/utils.js";
-import { numberWithThousands, replaceAll } from "../../../api/utils";
+import { numberWithThousands, replaceAll, isNumber } from "../../../api/utils";
 
 import "./ProductDetail.css";
 
@@ -34,8 +34,13 @@ class ProductDetail extends Component {
         let value = "";
         switch (valueType) {
             case "TEXT":
+                value = "value";
+                break;
             case "NUMBER":
                 value = "value";
+                if (!isNumber(replaceAll(event.target[value], ",", ""))) {
+                    return;
+                }
                 break;
             case "BOOLEAN":
                 value = "checked";
@@ -54,9 +59,8 @@ class ProductDetail extends Component {
     };
 
     handleSaveProduct = () => {
-        addUpdateProduct(this.state)
+        addUpdateProduct(this.state, this.props.mode)
             .then(result => {
-                console.log(result);
                 if (this.props.mode === "edit") {
                     this.props.handleHideProductDetail();
                 } else {

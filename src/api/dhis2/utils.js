@@ -52,9 +52,25 @@ const pushData = (endPoint, payload) => {
         .then(json => json);
 };
 
+const filterGenerator = (filters) => {
+    let filterString = "";
+    Object.keys(filters).forEach(filterProperty => {
+        if (filters[filterProperty].value) {
+            if (filters[filterProperty].type === "property") {
+                filterString += `&filter=${filters[filterProperty].property}:${filters[filterProperty].operator}:${filters[filterProperty].value}`;
+            } else {
+                filterString += `&filter=attributeValues.value:${filters[filterProperty].operator}:${filters[filterProperty].value}`;
+            }
+        }
+    });
+
+    return filterString;
+};
+
 export {
     getAuthorizationHeader,
     pullData,
     pushData,
-    generateUid
+    generateUid,
+    filterGenerator
 }

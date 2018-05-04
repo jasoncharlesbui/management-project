@@ -1,12 +1,26 @@
 //For adding thousands sperator
 const numberWithThousands = (num) => {
-    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return num
+        .toString()
+        .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
 //For replacing all occurrences in a string
 const replaceAll = (string, search, replacement) => {
     return string.replace(new RegExp(search, 'g'), replacement);
 };
+
+const isNumber = (value) => {
+    let regex = /^[0-9]+$/;
+    if (value === "") {
+        return true;
+    }
+    if (value.match(regex) && value !== "") {
+        return true;
+    } else {
+        return false;
+    }
+}
 
 //For removing all Vietnamese accents
 function removeAccents(str) {
@@ -35,5 +49,6 @@ function removeAccents(str) {
 export {
     numberWithThousands,
     replaceAll,
-    removeAccents
+    removeAccents,
+    isNumber
 }

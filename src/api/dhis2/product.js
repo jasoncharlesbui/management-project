@@ -1,11 +1,13 @@
-import { pullData, pushData, editData } from "./utils.js";
+import { pullData, pushData, filterGenerator } from "./utils.js";
 import { metaData } from "./metadata.js";
 import _ from "lodash";
 import { replaceAll } from "../utils";
 
 
-const getProduct = (page) => {
-    let endPoint = `/api/options?filter=optionSet.id:eq:${metaData.PRODUCT.id}&paging=true&pageSize=14&page=${page}&fields=id,name,code,attributeValues&order=created:DESC`;
+
+
+const getProduct = (filters, page, numberOfRecords) => {
+    let endPoint = `/api/options?filter=optionSet.id:eq:${metaData.PRODUCT.id}&paging=true&pageSize=${numberOfRecords}&page=${page}&fields=id,name,code,attributeValues&order=created:DESC${filterGenerator(filters)}`;
     return pullData(endPoint, 1)
         .then(result => {
             return {
@@ -14,26 +16,17 @@ const getProduct = (page) => {
                 total: result.pager.total
             }
         })
-}
+};
 
-const filterProductByNameOrCode = (value, property) => {
-    let endPoint = `/api/options?filter=optionSet.id:eq:${metaData.PRODUCT.id}&paging=true&pageSize=14&page=${1}&fields=id,name,code,attributeValues&order=created:DESC&filter=${property}:ilike:${value}`;
-
-    return pullData(endPoint, 1)
-        .then(result => {
-            return {
-                products: transformFromDhis2(result),
-                pageCount: result.pager.pageCount,
-                total: result.pager.total
-            }
-        })
-}
-
-const addUpdateProduct = (product) => {
+const addUpdateProduct = (product, mode) => {
     let endPoint = `/api/metadata`;
     return pushData(endPoint, transformToDhis2(product))
         .then(result => {
-            return pushData(`/api/optionSets/${metaData.PRODUCT.id}/options/${product.productId}`, {})
+            if (mode === "add") {
+                return pushData(`/api/optionSets/${metaData.PRODUCT.id}/options/${product.productId}`, {})
+            } else {
+                return result;
+            }
         });
 };
 
@@ -54,7 +47,7 @@ const transformFromDhis2 = (result) => {
             productActive: (getAttribute(product, metaData.PRODUCT_ACTIVE.id) == "true"),
             productInventory: getAttribute(product, metaData.PRODUCT_INVENTORY.id),
             productImage: getAttribute(product, metaData.PRODUCT_IMAGE.id)
-        })
+        });
     });
     return products;
 }
@@ -65,6 +58,9 @@ const transformToDhis2 = (product) => {
             id: product.productId,
             name: product.productName,
             code: product.productCode,
+            optionSet: {
+                id: metaData.PRODUCT.id
+            },
             attributeValues: [{
                 value: parseInt(replaceAll(product.productPrice, ",", "")),
                 attribute: {
@@ -104,5 +100,4 @@ export {
     getProduct,
     addUpdateProduct,
     deleteProduct,
-    filterProductByNameOrCode
 }
