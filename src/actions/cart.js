@@ -14,9 +14,10 @@ const acChangeQuantityUnsafe = (productId, cartId, value) => ({
     value
 })
 
-export const acRemoveFromCart = (productId) => ({
+export const acRemoveFromCart = (productId, cartId) => ({
     type: actionTypes.REMOVE_FROM_CART,
-    productId
+    productId,
+    cartId
 })
 
 

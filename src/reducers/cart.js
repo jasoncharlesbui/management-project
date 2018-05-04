@@ -8,7 +8,7 @@ const initialState =
         addedIds: [],
         quantityByIds: {}
     };
-const initialStateCart = {
+const initialStateCart = JSON.parse(localStorage.getItem('cart')) || {
     b0: {
         addedIds: [],
         quantityByIds: {}
@@ -78,7 +78,7 @@ const cart = (state = initialStateCart, action) => {
                             quantityByIds: quantityByIds(state[cartId].quantityByIds, action)
                         }
                 }
-                // localStorage.setItem('cart', JSON.stringify(cart));
+                localStorage.setItem('cart', JSON.stringify(cart));
                 return cart;
             }
             return state;

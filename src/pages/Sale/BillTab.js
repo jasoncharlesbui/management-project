@@ -24,7 +24,7 @@ const BillItem = ({ product, index, billId, onActionChangeQuantityClicked, onAct
         <div className="item">
             <div className="cell-order">{index + 1}</div>
             <div className="cell-action"><Clear
-                onClick={() => onActionRemoveFromCartClicked(product.id)}
+                onClick={() => onActionRemoveFromCartClicked(product.id, billId)}
                 style={{ width: 16, height: 16 }} /></div>
 
             <div className="row-product">
