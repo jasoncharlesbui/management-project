@@ -1,6 +1,7 @@
 import React from "react";
 import "./Sale.css";
 import PropTypes from "prop-types";
+import { connect } from 'react-redux';
 import {
     AppBar,
     Toolbar,
@@ -22,6 +23,7 @@ import Products from "./Products.js";
 import BillTab from "./BillTab.js";
 
 import Loader from '../../commons/Loader'
+import * as fromReducers from '../../reducers'
 
 const styles = {
     root: {
@@ -120,16 +122,12 @@ class TopBar extends React.Component {
     }
 }
 
-
-
 class LeftPager extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             value: 0,
-            listBills: [{
-                title: "Hóa đơn"
-            }],
+            currentBillId: this.props.bills[0],
             drawerActive: true,
             isLoading: true
         };
@@ -137,7 +135,8 @@ class LeftPager extends React.Component {
 
     handleChangeTab = (event, value) => {
         this.setState({
-            value: value
+            value: value,
+            currentBillId: `b${value}`
         })
     }
 
@@ -163,8 +162,8 @@ class LeftPager extends React.Component {
     }
 
     render() {
-        const { styles } = this.props;
-        const { listBills, value, isLoading } = this.state;
+        const { styles, bills } = this.props;
+        const { listBills, value, isLoading, currentBillId } = this.state;
         let shoppingCartClassName = this.state.drawerActive ? "shopping-cart" : "shopping-cart shopping-cart-expand";
         return (
             <div className="left-content">
@@ -179,8 +178,8 @@ class LeftPager extends React.Component {
                         transform: "translateZ(0)"
                     }}
                 >
-                    {listBills.map((bill, idex) => (
-                        <Tab key={idex} label={`${bill.title} ${idex + 1}`} className="App-Tab" />
+                    {bills.map((bill, idex) => (
+                        <Tab key={idex} label={`Hóa Đơn ${idex + 1}`} className="App-Tab" />
                     ))}
                     <Tab
                         label="+"
@@ -193,10 +192,14 @@ class LeftPager extends React.Component {
                     />
                 </Tabs>
                 {isLoading == false && <div className={shoppingCartClassName}>
-                    {listBills.map((bill, idex) => {
+                    {bills.map((bill, idex) => {
                         return (
                             <span key={idex}>
-                                {value === idex && <BillTab key={idex} > Bill {`${idex + 1}`}</BillTab>}
+                                {value == idex &&
+                                    <BillTab
+                                        key={idex}
+                                        billId={bill}
+                                    > Bill {`${idex + 1}`}</BillTab>}
                             </span>
                         )
                     })}
@@ -206,6 +209,7 @@ class LeftPager extends React.Component {
                     onRef={ref => (this.child = ref)}
                     onExpandCart={this.expandShoppingCart}
                     onSetLoadingStatus={this.setLoadingStatus}
+                    currentBillId={currentBillId}
                 >
                 </Products>
 
@@ -220,6 +224,13 @@ class LeftPager extends React.Component {
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        bills: fromReducers.getCarts(state)
+    }
+}
+LeftPager = connect(mapStateToProps)(LeftPager);
+
 class RightPager extends React.Component {
     render() {
         return <div className="right-content" />;
@@ -227,7 +238,6 @@ class RightPager extends React.Component {
 }
 
 class Sale extends React.Component {
-
     constructor(props) {
         super(props);
     }
@@ -245,4 +255,4 @@ class Sale extends React.Component {
     }
 }
 
-export default withStyles(styles)(Sale);
+export default withStyles(styles)(connect(mapStateToProps)(Sale));

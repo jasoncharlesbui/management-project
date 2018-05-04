@@ -19,7 +19,7 @@ import {
     Clear,
 } from "material-ui-icons";
 
-const BillItem = ({ product, index, onActionChangeQuantityClicked, onActionRemoveFromCartClicked }) => {
+const BillItem = ({ product, index, billId, onActionChangeQuantityClicked, onActionRemoveFromCartClicked }) => {
     return (
         <div className="item">
             <div className="cell-order">{index + 1}</div>
@@ -36,14 +36,14 @@ const BillItem = ({ product, index, onActionChangeQuantityClicked, onActionRemov
 
                 <div className="cell-quantity">
                     <button className="plus-btn" type="button" name="button"
-                        onClick={() => onActionChangeQuantityClicked(product.id, product.quantity + 1)}>
+                        onClick={() => onActionChangeQuantityClicked(product.id, billId, product.quantity + 1)}>
                         <Add style={{ width: 14, height: 14 }} />
                     </button>
                     <input type="text" name="name" value={`${product.quantity}`}
                         onChange={() => null} />
                     <button className="minus-btn" type="button" name="button"
-                        onClick={() => onActionChangeQuantityClicked(product.id, product.quantity - 1)}>
-                        <Remove style={{ width: 14, height: 14 }} />
+                        onClick={() => onActionChangeQuantityClicked(product.id, billId, product.quantity - 1)}>
+                        < Remove style={{ width: 14, height: 14 }} />
                     </button>
                 </div>
                 <div className="cell-warning">
@@ -59,7 +59,7 @@ const BillItem = ({ product, index, onActionChangeQuantityClicked, onActionRemov
 
                 <div className="cell-price">{(product.price * product.quantity).toLocaleString()}</div>
             </div>
-        </div>
+        </div >
     )
 }
 
@@ -69,13 +69,15 @@ class BillTab extends React.Component {
         super(props);
     }
     render() {
-        const { products } = this.props;
+        const { products, billId } = this.props;
         return (
+
             <span>
                 {products.map((product, index) => {
                     return (
                         <BillItem
                             index={index}
+                            billId={billId}
                             key={product.id}
                             product={product}
                             onActionChangeQuantityClicked={this.props.onActionChangeQuantity}
@@ -88,9 +90,9 @@ class BillTab extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, ownProps) => {
     return {
-        products: fromReducers.getCartProducts(state)
+        products: fromReducers.getCartProducts(state, ownProps.billId),
     }
 }
 

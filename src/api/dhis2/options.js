@@ -6,8 +6,10 @@ import { metaData } from './metadata'
 import defaultConfig from './config'
 
 const endPoint = [
-    `optionSets/${metaData.PRODUCT.id}.json?paging=false`,
-    "fields=options[id,name,code,attributeValues]"
+    `options.json?paging=false`,
+    `filter=optionSet.id:eq:${metaData.PRODUCT.id}`,
+    "fields=id,name,code,attributeValues",
+    `&filter=attributeValues.attribute.id:eq:${metaData.PRODUCT_ACTIVE.id}&filter=attributeValues.value:eq:true`
 ].join("&");
 
 const transfrom = data => {

@@ -3,11 +3,21 @@ import { saveState, loadState } from '../localStorage';
 import _ from 'lodash';
 // console.log(JSON.parse(localStorage.getItem('cart')));
 // localStorage.removeItem('cart');
-const initialState = (JSON.parse(localStorage.getItem('cart')) ||
+const initialState =
     {
         addedIds: [],
         quantityByIds: {}
-    });
+    };
+const initialStateCart = {
+    b0: {
+        addedIds: [],
+        quantityByIds: {}
+    },
+    b1: {
+        addedIds: [],
+        quantityByIds: {}
+    }
+};
 // JSON.parse(localStorage.getItem('cart')) ||
 
 // localStorage.getItem('cart') ||
@@ -52,22 +62,30 @@ const quantityByIds = (state = initialState.quantityByIds, action) => {
     }
 }
 
-const cart = (state = initialState, action) => {
+const cart = (state = initialStateCart, action) => {
     switch (action.type) {
         case 'not-yet':
             return state;
         default:
-            let cart = {
-                addedIds: addedIds(state.addedIds, action),
-                quantityByIds: quantityByIds(state.quantityByIds, action)
+            const { cartId } = action;
+            if (cartId) {
+                console.log(cartId);
+                let cart = {
+                    ...state,
+                    [cartId]:
+                        {
+                            addedIds: addedIds(state[cartId].addedIds, action),
+                            quantityByIds: quantityByIds(state[cartId].quantityByIds, action)
+                        }
+                }
+                // localStorage.setItem('cart', JSON.stringify(cart));
+                return cart;
             }
-            localStorage.setItem('cart', JSON.stringify(cart));
-            return cart;
+            return state;
     }
 }
 
 export default cart;
-
 
 // selectors
 export const getAddedIds = state => state.addedIds;

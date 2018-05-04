@@ -100,8 +100,9 @@ class Products extends React.Component {
     };
 
     render() {
-        const { products, classes } = this.props;
+        const { products, classes, currentBillId } = this.props;
         const { listBills } = this.state;
+        console.log(currentBillId);
         return (
             <Drawer
                 variant="persistent"
@@ -125,7 +126,7 @@ class Products extends React.Component {
                         <Product
                             key={item.id}
                             product={item}
-                            onActionAddtoCartCliked={() => this.props.onActionAddtoCart(item.id)}
+                            onActionAddtoCartCliked={() => this.props.onActionAddtoCart(item.id, currentBillId)}
                         />
                     )}
                 </div>

@@ -15,5 +15,5 @@ Sale - Cart
 - Search product to add to cart
 - Loading progress (DONE)
 - Fix product quantity (minus number) (DONE)
-- Remove a bill
+- Remove a bill 
 - Multiple bills
