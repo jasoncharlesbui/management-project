@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import registerServiceWorker from './registerServiceWorker';
 
 
 import App from './pages/App/App.js';
@@ -14,3 +15,4 @@ ReactDOM.render(
         <App />
     </Provider>,
     document.getElementById('root'));
+registerServiceWorker();
