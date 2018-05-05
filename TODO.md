@@ -14,4 +14,4 @@ Sale - Cart
 - Loading progress (DONE)
 - Fix product quantity (minus number) (DONE)
 - Remove a bill 
-- Multiple bills
+- Multiple bills (DONE)

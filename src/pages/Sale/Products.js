@@ -102,7 +102,6 @@ class Products extends React.Component {
     render() {
         const { products, classes, currentBillId } = this.props;
         const { listBills } = this.state;
-        console.log(currentBillId);
         return (
             <Drawer
                 variant="persistent"

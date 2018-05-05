@@ -23,6 +23,9 @@ import Products from "./Products.js";
 import BillTab from "./BillTab.js";
 
 import Loader from '../../commons/Loader'
+import {
+    fromCart
+} from '../../actions'
 import * as fromReducers from '../../reducers'
 
 const styles = {
@@ -141,9 +144,6 @@ class LeftPager extends React.Component {
     }
 
     handleAddBill = () => {
-        this.state.listBills.push({
-            title: "Hóa đơn",
-        })
         this.setState(prevState => ({
             listBills: this.state.listBills
         }));
@@ -162,7 +162,7 @@ class LeftPager extends React.Component {
     }
 
     render() {
-        const { styles, bills } = this.props;
+        const { styles, bills, onActionAddBill } = this.props;
         const { listBills, value, isLoading, currentBillId } = this.state;
         let shoppingCartClassName = this.state.drawerActive ? "shopping-cart" : "shopping-cart shopping-cart-expand";
         return (
@@ -183,7 +183,7 @@ class LeftPager extends React.Component {
                     ))}
                     <Tab
                         label="+"
-                        onClick={this.handleAddBill}
+                        onClick={() => onActionAddBill()}
                         style={{
                             backgroundColor: "#FFFFFF",
                             maxWidth: 40,
@@ -229,7 +229,10 @@ const mapStateToProps = state => {
         bills: fromReducers.getCarts(state)
     }
 }
-LeftPager = connect(mapStateToProps)(LeftPager);
+const mapActionToProps = {
+    onActionAddBill: fromCart.acAddBill
+}
+LeftPager = connect(mapStateToProps, mapActionToProps)(LeftPager);
 
 class RightPager extends React.Component {
     render() {
@@ -255,4 +258,4 @@ class Sale extends React.Component {
     }
 }
 
-export default withStyles(styles)(connect(mapStateToProps)(Sale));
+export default withStyles(styles)(Sale);

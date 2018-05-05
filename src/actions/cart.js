@@ -14,12 +14,15 @@ const acChangeQuantityUnsafe = (productId, cartId, value) => ({
     value
 })
 
+export const acAddBill = () => ({
+    type: actionTypes.ADD_BILL
+})
+
 export const acRemoveFromCart = (productId, cartId) => ({
     type: actionTypes.REMOVE_FROM_CART,
     productId,
     cartId
 })
-
 
 // thunks
 export const acAddToCart = (productId, billId) => (dispatch, getState) => {

@@ -66,10 +66,16 @@ const cart = (state = initialStateCart, action) => {
     switch (action.type) {
         case 'not-yet':
             return state;
+        case actionTypes.ADD_BILL:
+            let listBill = Object.keys(state);
+            let billId = "b" + (Number(listBill[listBill.length - 1].replace("b", "")) + 1);
+            return {
+                ...state,
+                [billId]: initialState
+            };
         default:
             const { cartId } = action;
             if (cartId) {
-                console.log(cartId);
                 let cart = {
                     ...state,
                     [cartId]:
