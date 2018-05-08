@@ -73,6 +73,9 @@ const cart = (state = initialStateCart, action) => {
                 ...state,
                 [billId]: initialState
             };
+        case actionTypes.REMOVE_BILL:
+            delete state[action.cartId];
+            return { ...state }
         default:
             const { cartId } = action;
             if (cartId) {

@@ -18,6 +18,11 @@ export const acAddBill = () => ({
     type: actionTypes.ADD_BILL
 })
 
+export const acRemoveBill = (cartId) => ({
+    type: actionTypes.REMOVE_BILL,
+    cartId
+})
+
 export const acRemoveFromCart = (productId, cartId) => ({
     type: actionTypes.REMOVE_FROM_CART,
     productId,

@@ -72,7 +72,7 @@ class Products extends React.Component {
     }
 
     componentDidMount() {
-        this.props.onRef(this)
+        this.props.onRef(this);
 
         const { store } = this.context;
         // api.getProducts(products => {

@@ -45,10 +45,23 @@
 .App-Tabs .App-Tab {
     background-color: #ffffff;
     width: inherit;
+    max-height: 48px;
     margin-right: 5px;
     opacity: 1;
     border: none;
     overflow: "auto";
+}
+
+.App-Tabs .App-Tab-Icon {
+    font-size: 20px;
+    position: absolute;
+    right: 0;
+    top: 40;
+    margin-right: 5px;
+}
+
+.App-Tabs .App-Tab-Icon:hover {
+    color: #E53935;
 }
 
 .App-menu-btn {

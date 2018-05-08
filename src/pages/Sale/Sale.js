@@ -15,6 +15,9 @@ import {
     Search, KeyboardArrowUp
 } from "material-ui-icons";
 import MenuIcon from "material-ui-icons/Menu";
+import {
+    Clear
+} from "material-ui-icons";
 import Menu, { MenuItem } from "material-ui/Menu";
 import FormControl from "material-ui/Form/FormControl";
 import Input from "material-ui/Input/Input";
@@ -143,10 +146,15 @@ class LeftPager extends React.Component {
         })
     }
 
-    handleAddBill = () => {
-        this.setState(prevState => ({
-            listBills: this.state.listBills
-        }));
+    handleRemoveBill = (cartId) => {
+        const { store } = this.props;
+        store.dispatch(fromCart.acRemoveBill(cartId));
+
+        let { bills } = this.props;
+        console.log(bills, `${bills[bills.length - 1]}`);
+        // this.setState({
+        //     currentBillId: `${bills[bills.length - 1]}`
+        // })
     }
 
     expandShoppingCart = (e) => {
@@ -179,7 +187,11 @@ class LeftPager extends React.Component {
                     }}
                 >
                     {bills.map((bill, idex) => (
-                        <Tab key={idex} label={`Hóa Đơn ${idex + 1}`} className="App-Tab" />
+                        <Tab key={idex}
+                            label={`Hóa Đơn ${idex + 1}`}
+                            className="App-Tab"
+                            icon={<Clear className="App-Tab-Icon" onClick={() => this.handleRemoveBill(bill)} />}
+                        />
                     ))}
                     <Tab
                         label="+"
@@ -230,9 +242,11 @@ const mapStateToProps = state => {
     }
 }
 const mapActionToProps = {
-    onActionAddBill: fromCart.acAddBill
+    onActionAddBill: fromCart.acAddBill,
+    onActionRemoveBill: fromCart.acRemoveBill
 }
 LeftPager = connect(mapStateToProps, mapActionToProps)(LeftPager);
+
 
 class RightPager extends React.Component {
     render() {
@@ -250,7 +264,9 @@ class Sale extends React.Component {
             <Grid>
                 <TopBar props={this.props} />
                 <div className="wrap-content">
-                    <LeftPager styles={this.props.classes} />
+                    <LeftPager
+                        store={this.context.store}
+                        styles={this.props.classes} />
                     <RightPager />
                 </div>
             </Grid>
@@ -258,4 +274,7 @@ class Sale extends React.Component {
     }
 }
 
+Sale.contextTypes = {
+    store: PropTypes.object
+}
 export default withStyles(styles)(Sale);
