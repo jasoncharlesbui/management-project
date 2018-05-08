@@ -245,16 +245,16 @@ class Stock extends Component {
                 </div>
                 <div className="right-bar">
                     <Paper style={{ width: "100%", height: "100%" }}>
-                        <div className="managing-page-title-container">
+                        <div className="page-title-container">
                             <div>
                                 <ProductIcon style={{ width: 30, height: 30 }} />
                             </div>
-                            <div className="managing-page-title">
+                            <div className="page-title">
                                 Quản lý hàng hóa
                             </div>
                         </div>
                         <LinearProgress style={{ opacity: this.state.loading }} />
-                        <div className="managing-page-content-container">
+                        <div className="page-content-container">
                             <div className="add-product-button">
                                 <Button variant="fab" color="primary" onClick={this.handleShowProductDetail("add", {})}>
                                     <AddIcon />

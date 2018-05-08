@@ -67,10 +67,41 @@ const filterGenerator = (filters) => {
     return filterString;
 };
 
+const getAttribute = (object, attributeId) => {
+    let attributeValue = object.attributeValues.find(attr => attr.attribute.id == attributeId);
+    if (attributeValue) {
+        return attributeValue.value;
+    } else {
+        return "";
+    }
+}
+
+const getTrackedEntityAttribute = (object, attributeId) => {
+    let attributeValue = object.attributes.find(attr => attr.attribute == attributeId);
+    if (attributeValue) {
+        return attributeValue.value;
+    } else {
+        return "";
+    }
+}
+
+
+const getDataValue = (object, dataElementId) => {
+    let dataValue = object.dataValues.find(dv => dv.dataElement == dataElementId);
+    if (dataValue) {
+        return dataValue.value;
+    } else {
+        return "";
+    }
+}
+
 export {
     getAuthorizationHeader,
     pullData,
     pushData,
     generateUid,
-    filterGenerator
+    filterGenerator,
+    getAttribute,
+    getTrackedEntityAttribute,
+    getDataValue
 }

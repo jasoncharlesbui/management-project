@@ -12,7 +12,6 @@ import { addUpdateProduct, deleteProduct } from "../../../api/dhis2/product.js";
 import { generateUid } from "../../../api/dhis2/utils.js";
 import { numberWithThousands, replaceAll, isNumber } from "../../../api/utils";
 
-import "./ProductDetail.css";
 
 class ProductDetail extends Component {
     constructor() {
@@ -132,12 +131,12 @@ class ProductDetail extends Component {
 
     render() {
         return (
-            <div className={`product-detail-dialog-container ${(this.props.showed) ? " show" : " hide"}`} >
-                <div className="product-detail-dialog">
-                    <div className="product-detail-dialog-title">
+            <div className={`detail-dialog-container ${(this.props.showed) ? " show" : " hide"}`} >
+                <div className="detail-dialog product">
+                    <div className="detail-dialog-title">
                         {(this.props.mode === "add") ? "Thêm hàng hóa" : "Chi tiết hàng hóa"}
                     </div>
-                    <div className="product-detail-dialog-content">
+                    <div className="detail-dialog-content">
                         <div className="product-image-container">
                             <input
                                 id="product-image-selector"
