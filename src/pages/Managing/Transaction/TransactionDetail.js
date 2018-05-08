@@ -64,7 +64,7 @@ class TransactionDetail extends Component {
                                                 Thời gian:
                                             </td>
                                             <td>
-                                                {moment(this.props.transaction.transactionTime).format("DD/MM/YYYY HH:MM")}
+                                                {moment(this.props.transaction.transactionTime).format("DD/MM/YYYY HH:mm")}
                                             </td>
                                             <td>
                                                 Khách hàng:
@@ -91,7 +91,6 @@ class TransactionDetail extends Component {
                                                 <TableCell>Giảm giá (VNĐ)</TableCell>
                                                 <TableCell>Giá bán (VNĐ)</TableCell>
                                                 <TableCell>Thành tiền (VNĐ)</TableCell>
-
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
@@ -100,9 +99,9 @@ class TransactionDetail extends Component {
                                                     this.props.transaction.transactionItems.map(item => {
                                                         return <TableRow >
                                                             <TableCell>{item.productId}</TableCell>
-                                                            <TableCell></TableCell>
+                                                            <TableCell>{item.productName}</TableCell>
                                                             <TableCell>{item.quantity}</TableCell>
-                                                            <TableCell></TableCell>
+                                                            <TableCell>{numberWithThousands(item.productPrice)}</TableCell>
                                                             <TableCell>{numberWithThousands(item.discount)}</TableCell>
                                                             <TableCell>{numberWithThousands(item.sellingPrice)}</TableCell>
                                                             <TableCell>{numberWithThousands(item.total)}</TableCell>

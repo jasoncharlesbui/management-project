@@ -15,8 +15,11 @@ import FirstPageIcon from 'material-ui-icons/FirstPage';
 import NextPageIcon from 'material-ui-icons/KeyboardArrowRight';
 import PreviousPageIcon from 'material-ui-icons/KeyboardArrowLeft';
 import LastPageIcon from 'material-ui-icons/LastPage';
+import _ from "lodash";
 
 import { getTransaction } from "../../../api/dhis2/transaction.js";
+import { getCustomerList } from "../../../api/dhis2/customer.js";
+import { getProduct } from "../../../api/dhis2/product.js";
 import { numberWithThousands, replaceAll, isNumber } from "../../../api/utils";
 
 import "./Transaction.css";
@@ -37,17 +40,64 @@ class Transaction extends Component {
 			showTransactionDetail: false,
 			selectedTransaction: {}
 		};
-		getTransaction(this.state.filters, this.state.currentPage, this.state.numberOfRecords)
-			.then(result => {
-				this.setState({
-					loading: 0,
-					transactions: result.transactions,
-					pageCount: result.pageCount
-				})
-				$("#total-products-info").html(`Tổng cộng: ${result.total}`);
-				$("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
-			});
+		this.getData(this.state.filters, this.state.currentPage, this.state.numberOfRecords);
 	}
+
+	getData = (filters, currentPage, numberOfRecords) => {
+		getTransaction(filters, currentPage, numberOfRecords)
+			.then(result => {
+				let productMapping = {};
+				let customerMapping = {};
+				let productFilters = {
+					id: {
+						type: "property",
+						property: "id",
+						operator: "in",
+						value: ""
+					}
+				};
+				let productIds = [];
+				let customerIds = "";
+				result.transactions.forEach(transaction => {
+					transaction.transactionItems.forEach(item => {
+						productIds.push(item.productId);
+					});
+					customerIds += transaction.transactionCustomer + ";";
+				});
+				productIds = _.uniq(productIds);
+				productFilters.id.value = replaceAll(JSON.stringify(productIds), `"`, ``);
+
+				Promise.all([
+					getProduct(productFilters, 1, 2000),
+					getCustomerList(customerIds)
+				])
+					.then(results => {
+						results[0].products.forEach(product => {
+							productMapping[product.productId] = product;
+						});
+
+						results[1].forEach(customer => {
+							customerMapping[customer.customerId] = customer;
+						});
+
+
+						result.transactions.forEach(transaction => {
+							transaction.transactionItems.forEach(item => {
+								item.productName = productMapping[item.productId].productName;
+								item.productPrice = productMapping[item.productId].productPrice;
+							});
+							transaction.transactionCustomer = customerMapping[transaction.transactionCustomer].customerName;
+						});
+						this.setState({
+							loading: 0,
+							transactions: result.transactions,
+							pageCount: result.pageCount
+						});
+						$("#total-products-info").html(`Tổng cộng: ${result.total}`);
+						$("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
+					})
+			});
+	};
 
 	handlePaging = (action) => () => {
 		let currentPage;
@@ -69,19 +119,8 @@ class Transaction extends Component {
 		this.setState({
 			loading: 1,
 		});
-		getTransaction(this.state.filters, currentPage, this.state.numberOfRecords)
-			.then(result => {
-				console.log(result.transactions);
-				this.setState({
-					currentPage: currentPage,
-					loading: 0,
-					transactions: result.transactions,
-					pageCount: result.pageCount
-				})
-				$("#total-products-info").html(`Tổng cộng: ${result.total}`);
-				$("#paging-info").html(`Trang ${this.state.currentPage} / ${this.state.pageCount}`);
-			});
 
+		this.getData(this.state.filters, currentPage, this.state.numberOfRecords);
 	}
 
 	handleShowTransactionDetail = (transaction) => () => {
@@ -127,6 +166,7 @@ class Transaction extends Component {
 											<TableCell>Giảm giá (VNĐ)</TableCell>
 											<TableCell>Thành tiền (VNĐ)</TableCell>
 											<TableCell>Khách đã trả (VNĐ)</TableCell>
+											<TableCell>Trạng thái</TableCell>
 										</TableRow>
 									</TableHead>
 									<TableBody>
@@ -135,16 +175,24 @@ class Transaction extends Component {
 												this.state.transactions.map(transaction => {
 													return <TableRow onClick={this.handleShowTransactionDetail(transaction)}>
 														<TableCell>{transaction.transactionId}</TableCell>
-														<TableCell>{moment(transaction.transactionTime).format("DD/MM/YYYY HH:MM")}</TableCell>
+														<TableCell>{moment(transaction.transactionTime).format("DD/MM/YYYY HH:mm")}</TableCell>
 														<TableCell>{transaction.transactionCustomer}</TableCell>
 														<TableCell>{numberWithThousands(transaction.transactionTotal)}</TableCell>
 														<TableCell>{numberWithThousands(transaction.transactionDiscount)}</TableCell>
 														<TableCell>{numberWithThousands(transaction.transactionAmount)}</TableCell>
 														<TableCell>{numberWithThousands(transaction.transactionPayedAmount)}</TableCell>
+														<TableCell>
+															{
+																(transaction.transactionStatus === "1") ?
+																	<span className="transaction-status done">Hoàn thành</span> :
+																	<span className="transaction-status pending">Chưa hoàn thành</span>
+															}
+														</TableCell>
 													</TableRow>
 												})
 												:
 												<TableRow>
+													<TableCell></TableCell>
 													<TableCell></TableCell>
 													<TableCell></TableCell>
 													<TableCell></TableCell>
