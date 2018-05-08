@@ -1,4 +1,4 @@
-import { pullData, pushData, filterGenerator } from "./utils.js";
+import { pullData, pushData, filterGenerator, getAttribute } from "./utils.js";
 import { metaData } from "./metadata.js";
 import _ from "lodash";
 import { replaceAll } from "../utils";
@@ -8,7 +8,7 @@ import { replaceAll } from "../utils";
 
 const getProduct = (filters, page, numberOfRecords) => {
     let endPoint = `/api/options?filter=optionSet.id:eq:${metaData.PRODUCT.id}&paging=true&pageSize=${numberOfRecords}&page=${page}&fields=id,name,code,attributeValues&order=created:DESC${filterGenerator(filters)}`;
-    return pullData(endPoint, 1)
+    return pullData(endPoint)
         .then(result => {
             return {
                 products: transformFromDhis2(result),
@@ -22,11 +22,7 @@ const addUpdateProduct = (product, mode) => {
     let endPoint = `/api/metadata`;
     return pushData(endPoint, transformToDhis2(product))
         .then(result => {
-            if (mode === "add") {
-                return pushData(`/api/optionSets/${metaData.PRODUCT.id}/options/${product.productId}`, {})
-            } else {
-                return result;
-            }
+            return result;
         });
 };
 
@@ -53,11 +49,13 @@ const transformFromDhis2 = (result) => {
 }
 
 const transformToDhis2 = (product) => {
+    console.log(product);
     let payload = {
         [metaData.PRODUCT.type]: [{
             id: product.productId,
             name: product.productName,
             code: product.productCode,
+            sortOrder: 1,
             optionSet: {
                 id: metaData.PRODUCT.id
             },
@@ -85,15 +83,6 @@ const transformToDhis2 = (product) => {
         }]
     };
     return payload;
-}
-
-const getAttribute = (product, attributeId) => {
-    let attributeValue = product.attributeValues.find(attr => attr.attribute.id == attributeId);
-    if (attributeValue) {
-        return attributeValue.value;
-    } else {
-        return "";
-    }
 }
 
 export {

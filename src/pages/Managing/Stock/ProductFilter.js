@@ -21,7 +21,6 @@ import { MenuItem } from 'material-ui/Menu';
 
 
 
-import "./ProductFilter.css";
 import { removeAccents, replaceAll } from "../../../api/utils";
 
 class ProductFilter extends Component {
@@ -70,7 +69,7 @@ class ProductFilter extends Component {
 
     render() {
         return (
-            <Paper className="product-filter-container">
+            <Paper className="filter-container">
                 <div className="section-container">
                     <div className="section-title-container">
                         <div className="section-expand-collapse-icon">
